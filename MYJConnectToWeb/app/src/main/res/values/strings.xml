@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MYJ Connect-To-Web</string>
+    <string name="launcher_icon">Launcher Icon</string>
+    <string name="type_a_url">Type a url</string>
+</resources>

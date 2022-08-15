@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Smart Assistant</string>
+    <string name="smart_assistant">Smart Assistant</string>
+    <string name="welcome">Welcome!</string>
+    <string name="loading_bot">Loading bot...</string>
+    <string name="icon">Icon</string>
+</resources>

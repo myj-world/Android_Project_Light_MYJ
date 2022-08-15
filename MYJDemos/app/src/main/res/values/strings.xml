@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">MYJ Demos</string>
+    <string name="myj_logo">MYJ Logo</string>
+    <string name="myj_world">MYJ World</string>
+    <string name="information_for_user">Information For User</string>
+    <string name="policy">Before using the app, we would like to inform the user that all the content in the app is for DEMO purposes only. We do not claim to be the owner of any of the ideas in the app or content (Images or text) within the app.</string>
+    <string name="agree"><![CDATA[Agree & Continue]]></string>
+    <string name="choose_an_app">Choose an app:</string>
+    <string name="dd_app_logo">Dinner Decider App Logo</string>
+    <string name="dd_decide">Decide!</string>
+    <string name="dd_add_food">Add food</string>
+    <string name="dd_add_new_food">Add new food...</string>
+</resources>
