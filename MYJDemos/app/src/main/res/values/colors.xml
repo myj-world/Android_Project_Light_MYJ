@@ -10,4 +10,5 @@
     <color name="dinnerDeciderPrimary">#5a7e8c</color>
     <color name="dinnerDeciderPrimaryDark">#5a7e8c</color>
     <color name="dinnerDeciderAccent">#CCD7DC</color>
+    <color name="DevProfileColorMain">#da5252</color>
 </resources>

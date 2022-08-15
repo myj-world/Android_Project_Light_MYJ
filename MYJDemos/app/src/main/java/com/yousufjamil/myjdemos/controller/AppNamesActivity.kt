@@ -1,11 +1,13 @@
 package com.yousufjamil.myjdemos.controller
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import com.yousufjamil.myjdemos.R
+import com.yousufjamil.myjdemos.controller.devprofile.DevProfileMainActivity
 import com.yousufjamil.myjdemos.controller.dinnerdecider.DinnerDeciderMainActivity
 import com.yousufjamil.myjdemos.legal.AgreeActivity
 import com.yousufjamil.myjdemos.model.AppNames
@@ -30,6 +32,9 @@ class AppNamesActivity : AppCompatActivity() {
             if (appClicked.name == "Dinner Decider") {
                 val startDinnerDecider = Intent(this, DinnerDeciderMainActivity::class.java)
                 startActivity(startDinnerDecider)
+            } else if (appClicked.name == "DevProfile") {
+                val startDevProfile = Intent(this, DevProfileMainActivity::class.java)
+                startActivity(startDevProfile)
             }
         }
     }

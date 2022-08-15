@@ -10,4 +10,14 @@
     <string name="dd_decide">Decide!</string>
     <string name="dd_add_food">Add food</string>
     <string name="dd_add_new_food">Add new food...</string>
+    <string name="devslopes_banner">Devslopes Banner</string>
+    <string name="devslopes_logo">Devslopes Logo</string>
+    <string name="devslopes_text">Devslopes</string>
+    <string name="devslopes_inbox_button">Inbox Button</string>
+    <string name="devslopes_camera_button">Camera Button</string>
+    <string name="devslopes_favourite_button">Favourite Button</string>
+    <string name="devslopes_images_img">Images Image</string>
+    <string name="devslopes_vid_img">Video Image</string>
+    <string name="devslopes_code_img">Code Image</string>
+    <string name="devslopes_customize_dashboard">Customize Dashboard</string>
 </resources>

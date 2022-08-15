@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controller.devprofile.DevProfileMainActivity">
+
+    <ImageView
+        android:id="@+id/devslopesBanner"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/devslopesbanner"
+        android:contentDescription="@string/devslopes_banner" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="120dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/devslopesprofilelogo"
+        android:contentDescription="@string/devslopes_logo"/>
+
+    <TextView
+        android:id="@+id/devslopesText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/devslopes_text"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/logo"
+        app:layout_constraintTop_toBottomOf="@+id/devslopesBanner" />
+
+    <ImageView
+        android:id="@+id/inboxBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="@string/devslopes_inbox_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/starBtn"
+        app:layout_constraintTop_toTopOf="@+id/starBtn"
+        app:srcCompat="@drawable/inboxbutton"
+        tools:ignore="RedundantDescriptionCheck,ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/cameraBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@string/devslopes_camera_button"
+        app:layout_constraintEnd_toStartOf="@+id/starBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        app:srcCompat="@drawable/camerabutton"
+        tools:ignore="RedundantDescriptionCheck,ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/starBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:contentDescription="@string/devslopes_favourite_button"
+        app:layout_constraintEnd_toStartOf="@+id/inboxBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/cameraBtn"
+        app:layout_constraintTop_toTopOf="@+id/cameraBtn"
+        app:srcCompat="@drawable/favoritebutton"
+        tools:ignore="RedundantDescriptionCheck,ImageContrastCheck" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/centerGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/dataImg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/videoImg"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/centerGuideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/starBtn"
+        app:srcCompat="@drawable/dataimage"
+        tools:ignore="ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/imagesImg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/codeImg"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/centerGuideline"
+        app:layout_constraintTop_toTopOf="@+id/dataImg"
+        app:srcCompat="@drawable/imagesimage"
+        android:contentDescription="@string/devslopes_images_img"/>
+
+    <ImageView
+        android:id="@+id/videoImg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="32dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/centerGuideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/videosimage"
+        android:contentDescription="@string/devslopes_vid_img"/>
+
+    <ImageView
+        android:id="@+id/codeImg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@+id/videoImg"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/centerGuideline"
+        app:srcCompat="@drawable/codeimage"
+        android:contentDescription="@string/devslopes_code_img"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

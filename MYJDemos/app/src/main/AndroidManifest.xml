@@ -14,9 +14,13 @@
         android:theme="@style/Theme.MYJDemos"
         tools:targetApi="31">
         <activity
-            android:name=".controller.dinnerdecider.DinnerDeciderMainActivity"
+            android:name=".controller.devprofile.DevProfileMainActivity"
             android:exported="false"
             android:parentActivityName=".controller.AppNamesActivity"/>
+        <activity
+            android:name=".controller.dinnerdecider.DinnerDeciderMainActivity"
+            android:exported="false"
+            android:parentActivityName=".controller.AppNamesActivity" />
         <activity
             android:name=".controller.AppNamesActivity"
             android:exported="false" />
