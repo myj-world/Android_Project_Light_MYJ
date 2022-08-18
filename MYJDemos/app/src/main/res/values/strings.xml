@@ -20,4 +20,6 @@
     <string name="devslopes_vid_img">Video Image</string>
     <string name="devslopes_code_img">Code Image</string>
     <string name="devslopes_customize_dashboard">Customize Dashboard</string>
+    <string name="products">Products:</string>
+    <string name="buy_product_web_text">Buy products at https://coderswag.com/</string>
 </resources>
