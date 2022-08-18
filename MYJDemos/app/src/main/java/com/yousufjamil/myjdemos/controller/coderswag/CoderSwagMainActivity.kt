@@ -12,6 +12,7 @@ import com.yousufjamil.myjdemos.R
 import com.yousufjamil.myjdemos.adapters.CoderSwagProductRecyclerAdapter
 import com.yousufjamil.myjdemos.model.DataService
 
+@Suppress("DEPRECATION")
 class CoderSwagMainActivity : AppCompatActivity() {
 
     lateinit var adapter: CoderSwagProductRecyclerAdapter
