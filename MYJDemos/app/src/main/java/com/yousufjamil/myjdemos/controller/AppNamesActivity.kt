@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.Toast
 import com.yousufjamil.myjdemos.R
+import com.yousufjamil.myjdemos.controller.coderswag.CoderSwagMainActivity
 import com.yousufjamil.myjdemos.controller.devprofile.DevProfileMainActivity
 import com.yousufjamil.myjdemos.controller.dinnerdecider.DinnerDeciderMainActivity
 import com.yousufjamil.myjdemos.legal.AgreeActivity
@@ -35,6 +37,11 @@ class AppNamesActivity : AppCompatActivity() {
             } else if (appClicked.name == "DevProfile") {
                 val startDevProfile = Intent(this, DevProfileMainActivity::class.java)
                 startActivity(startDevProfile)
+            } else if (appClicked.name == "Coderswag") {
+                val startCoderswag = Intent(this, CoderSwagMainActivity::class.java)
+                startActivity(startCoderswag)
+            } else {
+                Toast.makeText(this, "Unknown Error", Toast.LENGTH_SHORT).show()
             }
         }
     }
