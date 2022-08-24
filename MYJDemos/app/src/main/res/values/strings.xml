@@ -24,4 +24,7 @@
     <string name="buy_product_web_text">Buy products at https://coderswag.com/</string>
     <string name="category_background">Category Background</string>
     <string name="category_name">Category Name</string>
+    <string name="item_image">Item Image</string>
+    <string name="item_name">Item Name</string>
+    <string name="item_price">Item Price</string>
 </resources>
