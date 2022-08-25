@@ -1,27 +1,27 @@
 package com.yousufjamil.myjdemos.controller.coderswag
 
-import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yousufjamil.myjdemos.R
-import com.yousufjamil.myjdemos.adapters.CoderSwagProductRecyclerAdapter
+import com.yousufjamil.myjdemos.adapters.CoderSwagCategoryProductRecyclerAdapter
 import com.yousufjamil.myjdemos.constants.EXTRA_CATEGORY
 import com.yousufjamil.myjdemos.model.DataService
 
 @Suppress("DEPRECATION")
-class CoderSwagMainActivity : AppCompatActivity() {
 
-    lateinit var adapter: CoderSwagProductRecyclerAdapter
-
+class CoderSwagProductsActivity : AppCompatActivity() {
+    lateinit var adapter: CoderSwagCategoryProductRecyclerAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_coder_swag_main)
+        setContentView(R.layout.activity_coder_swag_products)
 
         val primaryColorDrawable = ColorDrawable(Color.parseColor("#fd1923"))
         supportActionBar?.setBackgroundDrawable(primaryColorDrawable)
@@ -35,16 +35,23 @@ class CoderSwagMainActivity : AppCompatActivity() {
             window.statusBarColor = this.resources.getColor(R.color.DevProfileColorMain)
         }
 
-        val productRecyclerView = findViewById<RecyclerView>(R.id.productListRecyclerView)
-        adapter = CoderSwagProductRecyclerAdapter(this, DataService.categories) { category ->
-            val productScreenIntentCoderSwag = Intent(this, CoderSwagProductsActivity::class.java)
-            productScreenIntentCoderSwag.putExtra(EXTRA_CATEGORY, category.title)
-            startActivity(productScreenIntentCoderSwag)
-        }
-        productRecyclerView.adapter = adapter
+        val categoryNameExtra= intent.getStringExtra(EXTRA_CATEGORY)
+        val productRecyclerView = findViewById<RecyclerView>(R.id.categoryProductListRecyclerView)
 
-        val layoutManager = LinearLayoutManager(this)
+        adapter = CoderSwagCategoryProductRecyclerAdapter(this, DataService.getProducts(categoryNameExtra))
+
+        val orientation = resources.configuration.orientation
+        val screenSize = resources.configuration.screenWidthDp
+        var spancount = 2
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            spancount = 3
+        }
+        if (screenSize >= 720) {
+            spancount = 3
+        }
+
+        val layoutManager = GridLayoutManager(this, spancount)
         productRecyclerView.layoutManager = layoutManager
-        productRecyclerView.setHasFixedSize(true)
+        productRecyclerView.adapter = adapter
     }
 }
