@@ -1,6 +1,9 @@
 package com.yousufjamil.myjworld
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -19,8 +22,18 @@ class MainActivity : AppCompatActivity() {
 
         Handler().postDelayed(
             {
-                val finishLoadingIntent = Intent(this, HomeActivity::class.java)
-                startActivity(finishLoadingIntent)
+                val connectionManager: ConnectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val activeNetwork: NetworkInfo? = connectionManager.activeNetworkInfo
+                val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
+                if (isConnected) {
+                    val finishLoadingIntent = Intent(this, HomeActivity::class.java)
+                    startActivity(finishLoadingIntent)
+                    finish()
+                } else {
+                    val internetIssueIntent = Intent(this, InternetProblemActivity::class.java)
+                    startActivity(internetIssueIntent)
+                    finish()
+                }
             }, 3000
         )
     }

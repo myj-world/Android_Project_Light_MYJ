@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/YousufAndroidStudioProjects/CompleteAndroidStudio/TryInitiateGitWithoutHeavyFiles/Android_Project_Light_MYJ/MYJWorld/app/src/main/res/drawable/ic_baseline_wifi_off_24.xml" value="0.2085" />
         <entry key="..\:/YousufAndroidStudioProjects/CompleteAndroidStudio/TryInitiateGitWithoutHeavyFiles/Android_Project_Light_MYJ/MYJWorld/app/src/main/res/layout/activity_home.xml" value="0.25" />
+        <entry key="..\:/YousufAndroidStudioProjects/CompleteAndroidStudio/TryInitiateGitWithoutHeavyFiles/Android_Project_Light_MYJ/MYJWorld/app/src/main/res/layout/activity_internet_problem.xml" value="0.25" />
         <entry key="..\:/YousufAndroidStudioProjects/CompleteAndroidStudio/TryInitiateGitWithoutHeavyFiles/Android_Project_Light_MYJ/MYJWorld/app/src/main/res/layout/activity_main.xml" value="0.1956521739130435" />
       </map>
     </option>
