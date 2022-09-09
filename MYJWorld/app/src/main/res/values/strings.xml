@@ -2,4 +2,6 @@
     <string name="app_name">MYJ World</string>
     <string name="myj_world">MYJ World</string>
     <string name="myj_logo">MYJ Logo</string>
+    <string name="back_home_txt">Back to Home page</string>
+    <string name="refresh_txt">Refresh page</string>
 </resources>
