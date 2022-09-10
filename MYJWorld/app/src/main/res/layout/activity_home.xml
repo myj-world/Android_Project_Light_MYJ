@@ -9,9 +9,16 @@
 
     <TextView
         android:id="@+id/webpageTitleTxt"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:ellipsize="marquee"
+        android:gravity="center"
+        android:singleLine="true"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/refreshPageBtn"
         app:layout_constraintStart_toEndOf="@+id/backHomeBtn"
@@ -58,6 +65,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/webpageTitleTxt" />
+        app:layout_constraintTop_toBottomOf="@+id/webpageTitleTxt">
+
+    </WebView>
+
+    <ProgressBar
+        android:id="@+id/loadWebProgress"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/webWeb" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
