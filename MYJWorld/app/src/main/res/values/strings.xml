@@ -4,4 +4,5 @@
     <string name="myj_logo">MYJ Logo</string>
     <string name="back_home_txt">Back to Home page</string>
     <string name="refresh_txt">Refresh page</string>
+    <string name="page_info">Page Info</string>
 </resources>

@@ -14,13 +14,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:ellipsize="marquee"
         android:gravity="center"
         android:singleLine="true"
         android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/refreshPageBtn"
+        app:layout_constraintEnd_toStartOf="@+id/infoPageBtn"
         app:layout_constraintStart_toEndOf="@+id/backHomeBtn"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Webpage Title" />
@@ -56,6 +54,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_refresh"
         android:contentDescription="@string/refresh_txt"/>
+
+    <ImageButton
+        android:id="@+id/infoPageBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/white"
+        android:contentDescription="@string/page_info"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toStartOf="@+id/refreshPageBtn"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_info_outline" />
 
     <WebView
         android:id="@+id/webWeb"

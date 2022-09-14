@@ -15,6 +15,7 @@ import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +34,7 @@ class HomeActivity : AppCompatActivity() {
         val webView: WebView = findViewById(R.id.webWeb)
         val homeBtn: ImageButton = findViewById(R.id.backHomeBtn)
         val refreshBtn: ImageButton = findViewById(R.id.refreshPageBtn)
+        val infoPageBtn: ImageButton = findViewById(R.id.infoPageBtn)
         var webpageTitleTxt: TextView = findViewById(R.id.webpageTitleTxt)
         val url = webView.url
         val settings = webView.settings
@@ -54,6 +56,18 @@ class HomeActivity : AppCompatActivity() {
             webView.loadUrl("https://myj.rf.gd")
         }
 
+        infoPageBtn.setOnClickListener {
+            if (url != null) {
+                MaterialAlertDialogBuilder(this)
+                    .setTitle("Info")
+                    .setMessage("Currently loaded url: $url")
+                    .setPositiveButton("Okay") {dialog, which ->
+                        // Do nothing
+                    }
+                    .show()
+            }
+        }
+
 //        override fun onBackPressed() {
 //            if (webView.canGoBack()) {
 //                webView.goBack()
@@ -67,8 +81,25 @@ class HomeActivity : AppCompatActivity() {
                 handler: SslErrorHandler?,
                 error: SslError?
             ) {
-//                super.onReceivedSslError(view, handler, error)
                 handler?.proceed()
+//                super.onReceivedSslError(view, handler, error)
+//                var agree = false
+//                MaterialAlertDialogBuilder(this@HomeActivity)
+//                    .setTitle("SSL Error")
+//                    .setMessage("We faced SSL Errors while loading the website. Do you want to continue loading anyway?")
+//                    .setPositiveButton("Continue Anyway") {dialog, which ->
+//                        agree = true
+//                        webView.loadUrl("file:///assets/index.html")
+//                    }
+//                    .setNegativeButton("Cancel") {dialog, which ->
+//                        agree = false
+//                    }
+//                    .show()
+//                if (agree) {
+//                    handler?.proceed()
+//                } else {
+//                    handler?.cancel()
+//                }
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
