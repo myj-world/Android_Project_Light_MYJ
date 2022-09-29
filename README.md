@@ -1,4 +1,4 @@
-<h1>Android Project Light - MYJ World</h1>
+<h1>Android Projects - MYJ World</h1>
 <p>Contains MYJ Android Projects - excludes projects with heavy resources.</p>
 
 <h2>Previous data</h2>
