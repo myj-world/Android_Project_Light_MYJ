@@ -1,9 +1,11 @@
 package com.yousufjamil.myjworld
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.net.http.SslError
 import android.os.Bundle
 import android.view.View
@@ -14,8 +16,11 @@ import android.webkit.WebViewClient
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,7 +86,13 @@ class HomeActivity : AppCompatActivity() {
                 handler: SslErrorHandler?,
                 error: SslError?
             ) {
-                handler?.proceed()
+                GlobalScope.launch {
+                    val site = Intent(Intent.ACTION_VIEW)
+                    site.data = Uri.parse("https://myj.rf.gd")
+                    startActivity(site)
+                }
+//                Toast.makeText(this, "We faced SSL Errors while loading the website. Opening website in browser...", Toast.LENGTH_LONG).show
+//                handler?.proceed()
 //                super.onReceivedSslError(view, handler, error)
 //                var agree = false
 //                MaterialAlertDialogBuilder(this@HomeActivity)
