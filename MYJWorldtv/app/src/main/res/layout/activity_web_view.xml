@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1E1E1E"
+    tools:context=".WebViewActivity">
+
+    <WebView
+        android:id="@+id/webWeb"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/refreshWeb" >
+
+    </WebView>
+
+    <ImageButton
+        android:id="@+id/refreshWeb"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="#1E1E1E"
+        android:contentDescription="@string/refresh_txt"
+        android:onClick="refreshWeb"
+        app:layout_constraintEnd_toStartOf="@+id/infoWeb"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_refresh_24" />
+
+    <ImageButton
+        android:id="@+id/homeWeb"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="#1E1E1E"
+        android:contentDescription="@string/back_home_txt"
+        android:onClick="homeWeb"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_home_24" />
+
+    <ImageButton
+        android:id="@+id/infoWeb"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="#1E1E1E"
+        android:contentDescription="@string/page_info"
+        android:onClick="infoWeb"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_info_24" />
+
+    <ProgressBar
+        android:id="@+id/loadWebProgress"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/webWeb"
+        app:layout_constraintTop_toTopOf="@+id/webWeb" />
+
+    <TextView
+        android:id="@+id/webpageTitleTxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/webWeb"
+        app:layout_constraintEnd_toStartOf="@+id/refreshWeb"
+        app:layout_constraintStart_toEndOf="@+id/homeWeb"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Webpage Title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
