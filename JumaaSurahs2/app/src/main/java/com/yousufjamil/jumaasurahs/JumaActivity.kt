@@ -1,0 +1,11 @@
+package com.yousufjamil.jumaasurahs
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+
+class JumaActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_juma)
+    }
+}

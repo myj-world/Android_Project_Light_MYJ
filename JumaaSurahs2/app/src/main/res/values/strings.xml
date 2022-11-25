@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Juma\'a Surahs</string>
+    <string name="bg">Background</string>
+    <string name="read">Read the surahs you need to read every Friday from your mobile.</string>
+    <string name="logo_img">Image logo</string>
+    <string name="surah_kahf">Surah Kahf</string>
+    <string name="surah_dukhan">Surah Dukhan</string>
+    <string name="select_a_surah">Select a surah:</string>
+    <string name="surah_juma">Surah Juma\'</string>
+</resources>
