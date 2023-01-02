@@ -7,7 +7,7 @@
     tools:context=".KahfActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/kahfSurahImg"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="32dp"
@@ -17,24 +17,29 @@
         android:layout_marginRight="32dp"
         android:layout_marginBottom="16dp"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintBottom_toTopOf="@+id/navigateKahfTxt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/light_kahf1" />
+        app:srcCompat="@drawable/light_kahf1"
+        android:contentDescription="@string/kahf_surah_img" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/navigateKahfTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginRight="64dp"
         android:layout_marginBottom="32dp"
-        android:text="Use arrow buttons to navigate across pages"
+        android:text="@string/navigateTxt"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView3"
-        app:layout_constraintStart_toEndOf="@+id/imageView2" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/kahfBackBtn"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="32dp"
@@ -43,10 +48,11 @@
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
+        app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24"
+        android:contentDescription="@string/next_btn"/>
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/kahfNextBtn"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginEnd="32dp"
@@ -55,5 +61,6 @@
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_baseline_navigate_next_24" />
+        app:srcCompat="@drawable/ic_baseline_navigate_next_24"
+        android:contentDescription="@string/previous_btn"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

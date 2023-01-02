@@ -7,4 +7,8 @@
     <string name="surah_dukhan">Surah Dukhan</string>
     <string name="select_a_surah">Select a surah:</string>
     <string name="surah_juma">Surah Juma\'</string>
+    <string name="kahf_surah_img">Surah Kahf</string>
+    <string name="navigateTxt">Use arrow buttons to navigate across pages</string>
+    <string name="next_btn">Next Button</string>
+    <string name="previous_btn">Previous Button</string>
 </resources>
