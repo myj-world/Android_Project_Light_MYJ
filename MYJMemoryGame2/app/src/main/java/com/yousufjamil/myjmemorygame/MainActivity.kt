@@ -1,10 +1,12 @@
 package com.yousufjamil.myjmemorygame
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,12 +26,19 @@ class MainActivity : AppCompatActivity() {
         proceedbutton.setOnClickListener {
             if (currentdifficulty.lowercase() == "easy") {
                 println("Difficulty: Easy selected")
+                val easyIntent = Intent(this, EasyActivity::class.java)
+                startActivity(easyIntent)
             } else if (currentdifficulty.lowercase() == "medium") {
                 println("Difficulty: Medium selected")
+                val mediumIntent = Intent(this, MediumActivity::class.java)
+                startActivity(mediumIntent)
             } else if (currentdifficulty.lowercase() == "hard") {
                 println("Difficulty: Hard selected")
+                val hardIntent = Intent(this, HardActivity::class.java)
+                startActivity(hardIntent)
             } else {
                 println("Difficulty: Unknown")
+                Toast.makeText(this, "Unknown error", Toast.LENGTH_SHORT).show()
             }
         }
 

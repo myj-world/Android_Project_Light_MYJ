@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EasyActivity">
+
+    <TextView
+        android:id="@+id/welcomeTxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:fontFamily="@font/poppins"
+        android:gravity="center"
+        android:text="MYJ Memory game!"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/card1"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="#FFFFFF"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/card2"
+        app:layout_constraintEnd_toStartOf="@+id/card2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/card2"
+        app:srcCompat="@drawable/logo"
+        android:contentDescription="@string/card" />
+
+    <ImageButton
+        android:id="@+id/card2"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="100dp"
+        android:background="#FFFFFF"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/card1"
+        app:layout_constraintTop_toBottomOf="@+id/levelEasy"
+        app:srcCompat="@drawable/logo"
+        android:contentDescription="@string/card" />
+
+    <ImageButton
+        android:id="@+id/card3"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="#FFFFFF"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/card4"
+        app:layout_constraintEnd_toStartOf="@+id/card4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/card2"
+        app:srcCompat="@drawable/logo"
+        android:contentDescription="@string/card" />
+
+    <ImageButton
+        android:id="@+id/card4"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="#FFFFFF"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/card3"
+        app:layout_constraintTop_toBottomOf="@+id/card2"
+        app:srcCompat="@drawable/logo"
+        android:contentDescription="@string/card" />
+
+    <TextView
+        android:id="@+id/levelEasy"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:fontFamily="@font/sansita"
+        android:gravity="center"
+        android:text="Easy level"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcomeTxt" />
+</androidx.constraintlayout.widget.ConstraintLayout>
