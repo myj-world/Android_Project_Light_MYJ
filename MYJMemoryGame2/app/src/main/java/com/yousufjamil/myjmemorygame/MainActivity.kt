@@ -36,6 +36,8 @@ class MainActivity : AppCompatActivity() {
                 println("Difficulty: Hard selected")
                 val hardIntent = Intent(this, HardActivity::class.java)
                 startActivity(hardIntent)
+            } else if (currentdifficulty == "") {
+                Toast.makeText(this, "Please select a difficulty", Toast.LENGTH_SHORT).show()
             } else {
                 println("Difficulty: Unknown")
                 Toast.makeText(this, "Unknown error", Toast.LENGTH_SHORT).show()
