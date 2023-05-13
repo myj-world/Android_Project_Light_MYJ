@@ -1,5 +1,6 @@
 package com.yousufjamil.myjmemorygame
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -26,7 +27,7 @@ class EasyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_easy)
 
-        chooseimages()
+        chooseimageseasy()
 
         val gameovertxteasy: TextView = findViewById(R.id.gameovertxteasy)
         val restartbtneasy: Button = findViewById(R.id.restartbtneasy)
@@ -35,11 +36,13 @@ class EasyActivity : AppCompatActivity() {
         restartbtneasy.visibility = View.INVISIBLE
 
         restartbtneasy.setOnClickListener {
-            chooseimages()
+            val restartIntentEasy = Intent(this, EasyActivity::class.java)
+            startActivity(restartIntentEasy)
+            finish()
         }
     }
 
-    fun chooseimages() {
+    fun chooseimageseasy() {
         chosen1 = random.nextInt(images.count())
         chosen.add(images[chosen1])
         chosen.removeAt(0)
@@ -47,10 +50,10 @@ class EasyActivity : AppCompatActivity() {
         chosen2 = random.nextInt(images.count())
         chosen.add(images[chosen2])
         println("CurrentList: $chosen")
-        assignimages(chosen)
+        assignimageseasy(chosen)
     }
 
-    fun assignimages(chosenlist: MutableList<String>) {
+    fun assignimageseasy(chosenlist: MutableList<String>) {
         var countnumber1 = 0
         var countnumber2 = 0
         var cardrandom = 0
@@ -83,10 +86,10 @@ class EasyActivity : AppCompatActivity() {
             }
             else -> Toast.makeText(this, "Unknown error", Toast.LENGTH_SHORT).show()
         }
-        gamestart()
+        gamestarteasy()
     }
 
-    fun gamestart() {
+    fun gamestarteasy() {
         val card1easy: ImageButton = findViewById(R.id.card1easy)
         val card2easy: ImageButton = findViewById(R.id.card2easy)
         val card3easy: ImageButton = findViewById(R.id.card3easy)
@@ -193,7 +196,7 @@ class EasyActivity : AppCompatActivity() {
             opencards.add(3)
             when (card3easy.drawable.constantState) {
                 card2easy.drawable.constantState -> {
-                    card1easy.visibility = View.INVISIBLE
+                    card3easy.visibility = View.INVISIBLE
                     card2easy.visibility = View.INVISIBLE
                     opencards.remove(3)
                     opencards.remove(2)

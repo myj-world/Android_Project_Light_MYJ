@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">MYJ Memory Game</string>
     <string name="card">Card</string>
+    <string name="restart">Restart</string>
+    <string name="win">You won!</string>
 </resources>

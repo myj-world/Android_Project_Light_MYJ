@@ -26,38 +26,47 @@
 
     <ImageButton
         android:id="@+id/card1easy"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
         android:background="#FFFFFF"
+        android:contentDescription="@string/card"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="@+id/card2easy"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@+id/card2easy"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/card2easy"
-        app:srcCompat="@drawable/logo"
-        android:contentDescription="@string/card" />
+        app:srcCompat="@drawable/logo" />
 
     <ImageButton
         android:id="@+id/card2easy"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="100dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
         android:background="#FFFFFF"
+        android:contentDescription="@string/card"
         android:scaleType="fitXY"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/card1easy"
         app:layout_constraintTop_toBottomOf="@+id/levelEasy"
-        app:srcCompat="@drawable/logo"
-        android:contentDescription="@string/card" />
+        app:srcCompat="@drawable/logo" />
 
     <ImageButton
         android:id="@+id/card3easy"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
         android:background="#FFFFFF"
+        android:contentDescription="@string/card"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="@+id/card4easy"
         app:layout_constraintEnd_toStartOf="@+id/card4easy"
@@ -65,21 +74,23 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/card2easy"
-        app:srcCompat="@drawable/logo"
-        android:contentDescription="@string/card" />
+        app:srcCompat="@drawable/logo" />
 
     <ImageButton
         android:id="@+id/card4easy"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
         android:background="#FFFFFF"
+        android:contentDescription="@string/card"
         android:scaleType="fitXY"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/card3easy"
         app:layout_constraintTop_toBottomOf="@+id/card2easy"
-        app:srcCompat="@drawable/logo"
-        android:contentDescription="@string/card" />
+        app:srcCompat="@drawable/logo" />
 
     <TextView
         android:id="@+id/levelEasy"
@@ -103,7 +114,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/sansita"
-        android:text="You won!"
+        android:text="@string/win"
         android:textColor="#01FD04"
         android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/restartbtneasy"
@@ -120,7 +131,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="16dp"
-        android:text="Restart"
+        android:text="@string/restart"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
