@@ -7,7 +7,7 @@
     tools:context=".EasyActivity">
 
     <TextView
-        android:id="@+id/welcomeTxt"
+        android:id="@+id/welcomeTxteasy"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -96,5 +96,32 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcomeTxt" />
+        app:layout_constraintTop_toBottomOf="@+id/welcomeTxteasy" />
+
+    <TextView
+        android:id="@+id/gameovertxteasy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/sansita"
+        android:text="You won!"
+        android:textColor="#01FD04"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/restartbtneasy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/levelEasy" />
+
+    <Button
+        android:id="@+id/restartbtneasy"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="Restart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,7 +3,9 @@ package com.yousufjamil.myjmemorygame
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import java.util.Random
 
@@ -25,6 +27,16 @@ class EasyActivity : AppCompatActivity() {
         setContentView(R.layout.activity_easy)
 
         chooseimages()
+
+        val gameovertxteasy: TextView = findViewById(R.id.gameovertxteasy)
+        val restartbtneasy: Button = findViewById(R.id.restartbtneasy)
+
+        gameovertxteasy.visibility = View.INVISIBLE
+        restartbtneasy.visibility = View.INVISIBLE
+
+        restartbtneasy.setOnClickListener {
+            chooseimages()
+        }
     }
 
     fun chooseimages() {
@@ -79,6 +91,10 @@ class EasyActivity : AppCompatActivity() {
         val card2easy: ImageButton = findViewById(R.id.card2easy)
         val card3easy: ImageButton = findViewById(R.id.card3easy)
         val card4easy: ImageButton = findViewById(R.id.card4easy)
+        card1easy.visibility = View.VISIBLE
+        card2easy.visibility = View.VISIBLE
+        card3easy.visibility = View.VISIBLE
+        card4easy.visibility = View.VISIBLE
         val opencards = mutableListOf<Int>()
         val solvedcards = mutableListOf<Int>()
         card1easy.setOnClickListener {
@@ -86,42 +102,40 @@ class EasyActivity : AppCompatActivity() {
                 card2easy.setImageResource(R.drawable.logo)
                 card3easy.setImageResource(R.drawable.logo)
                 card4easy.setImageResource(R.drawable.logo)
-                opencards.remove(2)
-                opencards.remove(3)
-                opencards.remove(4)
+                opencards.clear()
             }
             val resourceIdcard1 = resources.getIdentifier(card1asset, "drawable", packageName)
-            opencards.add(1)
             card1easy.setImageResource(resourceIdcard1)
             opencards.add(1)
-
-            println("OpenCards: $opencards")
-
-            when (card1easy.drawable) {
-                card2easy.drawable -> {
+            when (card1easy.drawable.constantState) {
+                card2easy.drawable.constantState -> {
                     card1easy.visibility = View.INVISIBLE
                     card2easy.visibility = View.INVISIBLE
                     opencards.remove(1)
                     opencards.remove(2)
                     solvedcards.add(1)
                     solvedcards.add(2)
+                    checkend(solvedcards)
                 }
-                card3easy.drawable -> {
+                card3easy.drawable.constantState -> {
                     card1easy.visibility = View.INVISIBLE
                     card3easy.visibility = View.INVISIBLE
                     opencards.remove(1)
                     opencards.remove(3)
                     solvedcards.add(1)
                     solvedcards.add(3)
+                    checkend(solvedcards)
                 }
-                card4easy.drawable -> {
+                card4easy.drawable.constantState -> {
                     card1easy.visibility = View.INVISIBLE
                     card4easy.visibility = View.INVISIBLE
                     opencards.remove(1)
                     opencards.remove(4)
                     solvedcards.add(1)
                     solvedcards.add(4)
+                    checkend(solvedcards)
                 }
+                else -> println("None matches")
             }
         }
 
@@ -130,41 +144,40 @@ class EasyActivity : AppCompatActivity() {
                 card1easy.setImageResource(R.drawable.logo)
                 card3easy.setImageResource(R.drawable.logo)
                 card4easy.setImageResource(R.drawable.logo)
-                opencards.remove(1)
-                opencards.remove(3)
-                opencards.remove(4)
+                opencards.clear()
             }
             val resourceIdcard2 = resources.getIdentifier(card2asset, "drawable", packageName)
             card2easy.setImageResource(resourceIdcard2)
             opencards.add(2)
-
-            println("OpenCards: $opencards")
-
-            when (card2easy.drawable) {
-                card1easy.drawable -> {
+            when (card2easy.drawable.constantState) {
+                card1easy.drawable.constantState -> {
                     card2easy.visibility = View.INVISIBLE
                     card1easy.visibility = View.INVISIBLE
                     opencards.remove(2)
                     opencards.remove(1)
                     solvedcards.add(2)
                     solvedcards.add(1)
+                    checkend(solvedcards)
                 }
-                card3easy.drawable -> {
+                card3easy.drawable.constantState -> {
                     card2easy.visibility = View.INVISIBLE
                     card3easy.visibility = View.INVISIBLE
                     opencards.remove(2)
                     opencards.remove(3)
                     solvedcards.add(2)
                     solvedcards.add(3)
+                    checkend(solvedcards)
                 }
-                card4easy.drawable -> {
+                card4easy.drawable.constantState -> {
                     card2easy.visibility = View.INVISIBLE
                     card4easy.visibility = View.INVISIBLE
                     opencards.remove(2)
                     opencards.remove(4)
                     solvedcards.add(2)
                     solvedcards.add(4)
+                    checkend(solvedcards)
                 }
+                else -> println("None matches")
             }
         }
 
@@ -173,41 +186,40 @@ class EasyActivity : AppCompatActivity() {
                 card1easy.setImageResource(R.drawable.logo)
                 card2easy.setImageResource(R.drawable.logo)
                 card4easy.setImageResource(R.drawable.logo)
-                opencards.remove(1)
-                opencards.remove(2)
-                opencards.remove(4)
+                opencards.clear()
             }
             val resourceIdcard3 = resources.getIdentifier(card3asset, "drawable", packageName)
             card3easy.setImageResource(resourceIdcard3)
             opencards.add(3)
-
-            println("OpenCards: $opencards")
-
-            when (card3easy.drawable) {
-                card2easy.drawable -> {
+            when (card3easy.drawable.constantState) {
+                card2easy.drawable.constantState -> {
                     card1easy.visibility = View.INVISIBLE
                     card2easy.visibility = View.INVISIBLE
                     opencards.remove(3)
                     opencards.remove(2)
                     solvedcards.add(3)
                     solvedcards.add(2)
+                    checkend(solvedcards)
                 }
-                card1easy.drawable -> {
+                card1easy.drawable.constantState -> {
                     card3easy.visibility = View.INVISIBLE
                     card1easy.visibility = View.INVISIBLE
                     opencards.remove(3)
                     opencards.remove(1)
                     solvedcards.add(3)
                     solvedcards.add(1)
+                    checkend(solvedcards)
                 }
-                card4easy.drawable -> {
+                card4easy.drawable.constantState -> {
                     card3easy.visibility = View.INVISIBLE
                     card4easy.visibility = View.INVISIBLE
                     opencards.remove(3)
                     opencards.remove(4)
                     solvedcards.add(3)
                     solvedcards.add(4)
+                    checkend(solvedcards)
                 }
+                else -> println("None matches")
             }
         }
 
@@ -216,42 +228,51 @@ class EasyActivity : AppCompatActivity() {
                 card1easy.setImageResource(R.drawable.logo)
                 card2easy.setImageResource(R.drawable.logo)
                 card3easy.setImageResource(R.drawable.logo)
-                opencards.remove(1)
-                opencards.remove(2)
-                opencards.remove(3)
+                opencards.clear()
             }
             val resourceIdcard4 = resources.getIdentifier(card4asset, "drawable", packageName)
             card4easy.setImageResource(resourceIdcard4)
             opencards.add(4)
-
-            println("OpenCards: $opencards")
-
-            when (card4easy.drawable) {
-                card2easy.drawable -> {
+            when (card4easy.drawable.constantState) {
+                card2easy.drawable.constantState -> {
                     card4easy.visibility = View.INVISIBLE
                     card2easy.visibility = View.INVISIBLE
                     opencards.remove(4)
                     opencards.remove(2)
                     solvedcards.add(4)
                     solvedcards.add(2)
+                    checkend(solvedcards)
                 }
-                card3easy.drawable -> {
+                card3easy.drawable.constantState -> {
                     card4easy.visibility = View.INVISIBLE
                     card3easy.visibility = View.INVISIBLE
                     opencards.remove(4)
                     opencards.remove(3)
                     solvedcards.add(4)
                     solvedcards.add(3)
+                    checkend(solvedcards)
                 }
-                card1easy.drawable -> {
+                card1easy.drawable.constantState -> {
                     card1easy.visibility = View.INVISIBLE
                     card4easy.visibility = View.INVISIBLE
                     opencards.remove(4)
                     opencards.remove(1)
                     solvedcards.add(4)
                     solvedcards.add(1)
+                    checkend(solvedcards)
                 }
+                else -> println("None matches")
             }
+        }
+    }
+
+    fun checkend(currentsolved: MutableList<Int>) {
+        if (currentsolved.count() == 4) {
+            val gameovertxteasy: TextView = findViewById(R.id.gameovertxteasy)
+            val restartbtneasy: Button = findViewById(R.id.restartbtneasy)
+            gameovertxteasy.visibility = View.VISIBLE
+            restartbtneasy.visibility = View.VISIBLE
+
         }
     }
 }
