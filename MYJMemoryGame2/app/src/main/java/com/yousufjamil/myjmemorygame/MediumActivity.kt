@@ -102,6 +102,7 @@ class MediumActivity : AppCompatActivity() {
                 bound -=1
                 countnumber4 = 0
             }
+            else -> println("Opened asset matches none Card 1, $card1asset")
         }
 
 //        Card2
@@ -138,6 +139,7 @@ class MediumActivity : AppCompatActivity() {
                 bound -=1
                 countnumber4 = 0
             }
+            else -> println("Opened asset matches none Card 2, $card1asset, $card2asset")
         }
 
 //        Card 3
@@ -174,6 +176,7 @@ class MediumActivity : AppCompatActivity() {
                 bound -=1
                 countnumber4 = 0
             }
+            else -> println("Opened asset matches none Card 3, $card1asset, $card2asset, $card3asset")
         }
 
         //        Card 4
@@ -210,6 +213,7 @@ class MediumActivity : AppCompatActivity() {
                 bound -=1
                 countnumber4 = 0
             }
+            else -> println("Opened asset matches none Card 4, $card1asset, $card2asset, $card3asset, $card4asset")
         }
 
         //        Card 5
@@ -246,6 +250,7 @@ class MediumActivity : AppCompatActivity() {
                 bound -=1
                 countnumber4 = 0
             }
+            else -> println("Opened asset matches none Card 5, $card1asset, $card2asset, $card3asset, $card4asset, $card5asset")
         }
 
         //        Card 6
@@ -282,6 +287,7 @@ class MediumActivity : AppCompatActivity() {
                 bound -=1
                 countnumber4 = 0
             }
+            else -> println("Opened asset matches none Card 6, $card1asset, $card2asset, $card3asset, $card4asset, $card5asset, $card6asset")
         }
 
         //        Card 7
@@ -318,6 +324,7 @@ class MediumActivity : AppCompatActivity() {
                 bound -=1
                 countnumber4 = 0
             }
+            else -> println("Opened asset matches none Card 7, $card1asset, $card2asset, $card3asset, $card4asset, $card5asset, $card6asset, $card7asset")
         }
 
         //        Card 8
@@ -354,7 +361,10 @@ class MediumActivity : AppCompatActivity() {
                 bound -=1
                 countnumber4 = 0
             }
+            else -> println("Opened asset matches none Card 8, $card1asset, $card2asset, $card3asset, $card4asset, $card5asset, $card6asset, $card7asset, $card8asset")
         }
+
+        println("Opened assets: $card1asset, $card2asset, $card3asset, $card4asset, $card5asset, $card6asset, $card7asset, $card8asset")
 
         gamestartmed()
     }
@@ -1028,7 +1038,7 @@ class MediumActivity : AppCompatActivity() {
     }
 
     fun checkend(currentsolved: MutableList<Int>) {
-        if (currentsolved.count() == 8) {
+        if (currentsolved.count() >= 8) {
             println("CurrentSolved: $currentsolved")
             val gameovertxtmed: TextView = findViewById(R.id.gameovertxtmed)
             val restartbtnmed: Button = findViewById(R.id.restartbtnmed)
