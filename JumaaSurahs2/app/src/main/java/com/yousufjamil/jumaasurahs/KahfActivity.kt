@@ -16,46 +16,58 @@ class KahfActivity : AppCompatActivity() {
         val previousBtn: ImageView = findViewById(R.id.kahfBackBtn)
         val surahKahf: ImageView = findViewById(R.id.kahfSurahImg)
 
+        previousBtn.visibility = View.INVISIBLE
+
         nextBtn.setOnClickListener {
-            when (surahKahf.drawable) {
-                resources.getDrawable(R.drawable.light_kahf1) -> {
+            when (surahKahf.drawable.constantState) {
+                resources.getDrawable(R.drawable.light_kahf1).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf2)
+                    previousBtn.visibility = View.VISIBLE
                     nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf2) -> {
+                resources.getDrawable(R.drawable.light_kahf2).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf3)
+                    previousBtn.visibility = View.VISIBLE
                     nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf3) -> {
+                resources.getDrawable(R.drawable.light_kahf3).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf4)
+                    previousBtn.visibility = View.VISIBLE
                     nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf4) -> {
+                resources.getDrawable(R.drawable.light_kahf4).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf5)
+                    previousBtn.visibility = View.VISIBLE
                     nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf5) -> {
+                resources.getDrawable(R.drawable.light_kahf5).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf6)
+                    previousBtn.visibility = View.VISIBLE
                     nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf6) -> {
+                resources.getDrawable(R.drawable.light_kahf6).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf7)
+                    previousBtn.visibility = View.VISIBLE
                     nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf7) -> {
+                resources.getDrawable(R.drawable.light_kahf7).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf8)
+                    previousBtn.visibility = View.VISIBLE
                     nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf8) -> {
+                resources.getDrawable(R.drawable.light_kahf8).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf9)
+                    previousBtn.visibility = View.VISIBLE
                     nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf9) -> {
+                resources.getDrawable(R.drawable.light_kahf9).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf10)
+                    previousBtn.visibility = View.VISIBLE
                     nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf10) -> {
+                resources.getDrawable(R.drawable.light_kahf10).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf11)
+                    previousBtn.visibility = View.VISIBLE
                     nextBtn.visibility = View.INVISIBLE
                 }
                 else -> {
@@ -65,46 +77,56 @@ class KahfActivity : AppCompatActivity() {
         }
 
         previousBtn.setOnClickListener {
-            when (surahKahf.drawable) {
-                resources.getDrawable(R.drawable.light_kahf2) -> {
+            when (surahKahf.drawable.constantState) {
+                resources.getDrawable(R.drawable.light_kahf2).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf1)
                     previousBtn.visibility = View.INVISIBLE
+                    nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf3) -> {
+                resources.getDrawable(R.drawable.light_kahf3).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf2)
                     previousBtn.visibility = View.VISIBLE
+                    nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf4) -> {
+                resources.getDrawable(R.drawable.light_kahf4).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf3)
                     previousBtn.visibility = View.VISIBLE
+                    nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf5) -> {
+                resources.getDrawable(R.drawable.light_kahf5).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf4)
                     previousBtn.visibility = View.VISIBLE
+                    nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf6) -> {
+                resources.getDrawable(R.drawable.light_kahf6).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf5)
                     previousBtn.visibility = View.VISIBLE
+                    nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf7) -> {
+                resources.getDrawable(R.drawable.light_kahf7).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf6)
                     previousBtn.visibility = View.VISIBLE
+                    nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf8) -> {
+                resources.getDrawable(R.drawable.light_kahf8).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf7)
                     previousBtn.visibility = View.VISIBLE
+                    nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf9) -> {
+                resources.getDrawable(R.drawable.light_kahf9).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf8)
                     previousBtn.visibility = View.VISIBLE
+                    nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf10) -> {
+                resources.getDrawable(R.drawable.light_kahf10).constantState -> {
                     surahKahf.setImageResource(R.drawable.light_kahf9)
                     previousBtn.visibility = View.VISIBLE
+                    nextBtn.visibility = View.VISIBLE
                 }
-                resources.getDrawable(R.drawable.light_kahf11) -> {
-                surahKahf.setImageResource(R.drawable.light_kahf10)
-                previousBtn.visibility = View.VISIBLE
+                resources.getDrawable(R.drawable.light_kahf11).constantState -> {
+                    surahKahf.setImageResource(R.drawable.light_kahf10)
+                    previousBtn.visibility = View.VISIBLE
+                    nextBtn.visibility = View.VISIBLE
             }
                 else -> {
                     Toast.makeText(this, "Unknown Error", Toast.LENGTH_SHORT).show()
