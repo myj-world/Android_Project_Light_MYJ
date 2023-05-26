@@ -2,6 +2,8 @@ package com.yousufjamil.jumaasurahs
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -11,6 +13,8 @@ class KahfActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_kahf)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val nextBtn: ImageView = findViewById(R.id.kahfNextBtn)
         val previousBtn: ImageView = findViewById(R.id.kahfBackBtn)
@@ -133,5 +137,19 @@ class KahfActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_top, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.playSurahBtn) {
+
+        } else if (item.itemId == R.id.restartSurahBtn) {
+
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

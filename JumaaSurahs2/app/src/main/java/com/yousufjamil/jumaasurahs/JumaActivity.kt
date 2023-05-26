@@ -1,15 +1,26 @@
 package com.yousufjamil.jumaasurahs
 
-import androidx.appcompat.app.AppCompatActivity
+import android.R.attr.path
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import java.io.File
+
 
 class JumaActivity : AppCompatActivity() {
+    var audioplaying = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_juma)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val nextBtn: ImageView = findViewById(R.id.jumaNextBtn)
         val previousBtn: ImageView = findViewById(R.id.jumaBackBtn)
         val surahJuma: ImageView = findViewById(R.id.jumaSurahImg)
@@ -41,5 +52,29 @@ class JumaActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_top, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val mediaPlayer = MediaPlayer.create(this, R.raw.jumah)
+        if (item.itemId == R.id.playSurahBtn) {
+            if (!audioplaying) {
+                mediaPlayer.start()
+
+                item.setIcon(R.drawable.baseline_pause_circle_24)
+                audioplaying = true
+            } else {
+                mediaPlayer.pause()
+                item.setIcon(R.drawable.baseline_play_circle_24)
+                audioplaying = false
+            }
+        } else if (item.itemId == R.id.restartSurahBtn) {
+            mediaPlayer.seekTo(0)
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

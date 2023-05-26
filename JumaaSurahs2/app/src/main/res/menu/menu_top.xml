@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/playSurahBtn"
+        android:title="Play/Pause Surah"
+        android:icon="@drawable/baseline_play_circle_24"
+        app:showAsAction="always"
+        android:iconTint="@color/white"/>
+    <item
+        android:id="@+id/restartSurahBtn"
+        android:title="Restart Audio"
+        android:icon="@drawable/baseline_refresh_24"
+        app:showAsAction="always"
+        android:iconTint="@color/white"/>
+</menu>
