@@ -14,12 +14,29 @@ import java.io.File
 
 class JumaActivity : AppCompatActivity() {
     var audioplaying = false
+    lateinit var mediaPlayer: MediaPlayer
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(EXTRA_AUDIO_JUMAH, audioplaying)
+        outState.putInt(AUDIO_POINT_JUMAH, mediaPlayer.currentPosition)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_juma)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.jumah)
+
+        if (savedInstanceState != null) {
+            audioplaying = savedInstanceState.getBoolean(EXTRA_AUDIO_JUMAH)
+            mediaPlayer.seekTo(savedInstanceState.getInt(AUDIO_POINT_JUMAH))
+            if (audioplaying) {
+                mediaPlayer.start()
+            }
+        }
 
         val nextBtn: ImageView = findViewById(R.id.jumaNextBtn)
         val previousBtn: ImageView = findViewById(R.id.jumaBackBtn)
@@ -60,7 +77,6 @@ class JumaActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val mediaPlayer = MediaPlayer.create(this, R.raw.jumah)
         if (item.itemId == R.id.playSurahBtn) {
             if (!audioplaying) {
                 mediaPlayer.start()
@@ -76,5 +92,10 @@ class JumaActivity : AppCompatActivity() {
             mediaPlayer.seekTo(0)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPause() {
+        mediaPlayer.pause()
+        super.onPause()
     }
 }

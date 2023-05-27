@@ -10,6 +10,8 @@ class SelectSurahActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_surah)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val jumaBtn: Button = findViewById(R.id.jumaBtn)
         jumaBtn.setOnClickListener {
             val selectIntent = Intent(this, JumaActivity::class.java)
