@@ -10,11 +10,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val idToFind = findViewById<EditText>(R.id.idEt)
+        val idToFind = findViewById<EditText>(R.id.idEt).text.toString()
         val findBtn = findViewById<Button>(R.id.findBtn)
 
         findBtn.setOnClickListener {
-            TODO("Not implemented")
+            val backgroundWorker: BackgroundWorker = BackgroundWorker()
+            BackgroundWorker().backgroundWorker(this)
+            backgroundWorker.execute("fetchData", idToFind)
         }
     }
 }
