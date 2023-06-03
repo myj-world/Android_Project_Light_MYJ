@@ -3,7 +3,6 @@ package com.yousufjamil.testsqldatabase
 import android.app.AlertDialog
 import android.content.Context
 import android.os.AsyncTask
-import android.widget.Toast
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.IOException
@@ -32,39 +31,49 @@ class BackgroundWorker: AsyncTask<String, Void, String>() {
     }
 
     override fun doInBackground(vararg params: String?): String? {
-        val type = params[0]
         val idToFind = params[1]
+        var result: String? = ""
+        var line: String? = ""
         try {
-            val url = URL("https://myj.rf.gd/DatabaseForm/TestAndroidSQL/")
+            println("Result pre-test 1")
+            val url = URL("https://ginastic.co/spare/45/index.php")
             val httpURLConnection = url.openConnection() as HttpURLConnection
+            println("Result: ${httpURLConnection.responseCode}")
             httpURLConnection.requestMethod = "POST"
             httpURLConnection.doOutput = true
             httpURLConnection.doInput = true
+            httpURLConnection.connect()
+            println("Result pre-test 2")
 
             val outputStream = httpURLConnection.outputStream
+            println("Result pre-test 2")
             val bufferedWriter = BufferedWriter(OutputStreamWriter(outputStream, "UTF-8"))
-            val post_data = URLEncoder.encode("id", "UTF-8")+"="+URLEncoder.encode(idToFind, "UTF-8")
-            bufferedWriter.write(post_data)
+            println("Result pre-test 2")
+            val postData = URLEncoder.encode("id", "UTF-8")+"="+URLEncoder.encode(idToFind, "UTF-8")
+            println("Result pre-test 2")
+            bufferedWriter.write(postData)
             bufferedWriter.flush()
             bufferedWriter.close()
             outputStream.close()
+            println("Result pre-test 3")
 
             val inputStream = httpURLConnection.inputStream
             val bufferedReader = BufferedReader(InputStreamReader(inputStream, "iso-8859-1"))
-            var result: String? = ""
-            var line: String? = ""
+            println("Result pre-test 4")
             while ((bufferedReader.readLine().also { line = it }) != null) {
                 result += line
+                println("Result pre-test 5")
             }
             bufferedReader.close()
             inputStream.close()
             httpURLConnection.disconnect()
+            println("Result pre-test 6")
         } catch (e: IOException) {
             println("Error found in connecting to database: $e")
         } catch (e: MalformedURLException) {
             println("Error found in connecting to database: $e")
         }
-        return null
+        return result
     }
 
     override fun onPostExecute(result: String?) {
