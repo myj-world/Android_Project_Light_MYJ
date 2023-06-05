@@ -13,8 +13,7 @@ class MainActivity : AppCompatActivity() {
 
         findBtn.setOnClickListener {
             val idToFind = findViewById<EditText>(R.id.idEt).text.toString()
-            val backgroundWorker = BackgroundWorker()
-            BackgroundWorker().backgroundWorker(this)
+            val backgroundWorker = BackgroundWorker(this)
             backgroundWorker.execute("fetchData", idToFind)
         }
     }
