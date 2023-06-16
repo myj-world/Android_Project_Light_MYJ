@@ -323,6 +323,22 @@
                 android:contentDescription="@null"
                 android:src="@drawable/baseline_insert_link_24" />
 
+            <ImageButton
+                android:id="@+id/action_insert_checkbox"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:src="@drawable/baseline_check_box_24" />
+
+            <ImageButton
+                android:id="@+id/action_change_font_size"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:src="@drawable/baseline_format_size_24" />
+
         </LinearLayout>
     </HorizontalScrollView>
 

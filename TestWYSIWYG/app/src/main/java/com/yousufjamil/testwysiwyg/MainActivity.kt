@@ -1,11 +1,14 @@
 package com.yousufjamil.testwysiwyg
 
+import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import jp.wasabeef.richeditor.RichEditor
 
@@ -34,8 +37,10 @@ class MainActivity : AppCompatActivity() {
 //        val rtApi = RTApi(this, RTProxyImpl(this), RTMediaFactoryImpl(this, true))
 //        mRTManager = RTManager(rtApi, savedInstanceState)
 
-        val mEditor = findViewById<RichEditor>(R.id.editor)
+        val mEditor: RichEditor = findViewById(R.id.editor)
         val mPreview = findViewById<TextView>(R.id.preview)
+
+        var returned: Any = ""
 //        val scrollView = findViewById<ScrollView>(R.id.scrollView2)
 
         mEditor.setEditorHeight(100);
@@ -117,10 +122,81 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.action_insert_link).setOnClickListener {
-            mEditor.insertLink(
-                "https://home.acc-web.repl.co/",
-                "Accorm"
-            )
+            showPopup("AddLink")
+        }
+
+        findViewById<View>(R.id.action_insert_checkbox).setOnClickListener { mEditor.insertTodo() }
+
+        findViewById<View>(R.id.action_change_font_size).setOnClickListener {
+            showPopup("FontSize")
+        }
+    }
+
+    fun showPopup(type: String) {
+        var data: Any = ""
+
+        val builder = AlertDialog.Builder(this)
+        val inflator = layoutInflater
+        val inputLayout = inflator.inflate(R.layout.popup_et, null)
+        val input = inputLayout.findViewById<EditText>(R.id.editTextText)
+
+        when (type) {
+            "FontSize" -> {
+                builder.setTitle("Set Font Size")
+                input.inputType = InputType.TYPE_CLASS_NUMBER
+                input.hint = "Enter a font size from 1 to 7..."
+            }
+            "AddLink" -> {
+                builder.setTitle("Enter link")
+                input.inputType = InputType.TYPE_CLASS_TEXT
+                input.hint = "Enter the link..."
+            }
+            else -> Toast.makeText(this@MainActivity, "Unknown Error", Toast.LENGTH_SHORT).show()
+        }
+
+        input.maxLines = 1
+
+        builder.setPositiveButton("OK") { dialog, which ->
+            data = input.text.toString()
+            when (type) {
+                "FontSize" -> {
+                    if (data != "" && data.toString().toInt() >= 0 && data.toString().toInt() <= 7) {
+                        setPopup(type, data, false)
+                    } else if (data.toString().toInt() < 0 || data.toString().toInt() > 7) {
+                        Toast.makeText(this@MainActivity, "Font size should be a value from 1 and 7 only", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@MainActivity, "Invalid value entered", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                "AddLink" -> {
+                    val dataArray = mutableListOf<String>()
+                    dataArray.add(data.toString())
+                    setPopup(type, data, false)
+                }
+                else -> Toast.makeText(this@MainActivity, "Unknown Error", Toast.LENGTH_SHORT).show()
+            }
+        }
+        builder.setNegativeButton("Cancel") { dialog, which ->
+            dialog.cancel()
+        }
+        builder.setView(inputLayout)
+        builder.show()
+    }
+
+    fun setPopup(type: String, data: Any, repeat: Boolean) {
+        val mEditor: RichEditor = findViewById(R.id.editor)
+        when (type) {
+            "FontSize" -> {
+                val datamodified = data.toString().toInt()
+                mEditor.setFontSize(datamodified)
+            }
+            "AddLink" -> {
+                mEditor.insertLink(
+                    "https://home.acc-web.repl.co/",
+                    "Accorm"
+                )
+            }
+            else -> Toast.makeText(this@MainActivity, "Unknown Error", Toast.LENGTH_SHORT).show()
         }
     }
 }
