@@ -40,11 +40,11 @@ class MainActivity : AppCompatActivity() {
         val mEditor: RichEditor = findViewById(R.id.editor)
         val mPreview = findViewById<TextView>(R.id.preview)
 
-        var returned: Any = ""
+//        var returned: Any = ""
 //        val scrollView = findViewById<ScrollView>(R.id.scrollView2)
 
-        mEditor.setEditorHeight(100);
-        mEditor.setEditorFontSize(15);
+        mEditor.setEditorHeight(100)
+        mEditor.setEditorFontSize(15)
         mEditor.setPadding(10, 10, 10, 10)
         mEditor.setPlaceholder("Type text here...")
 
@@ -90,13 +90,17 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        findViewById<View>(R.id.action_bg_color).setOnClickListener(object : View.OnClickListener {
-            private var isChanged = false
-            override fun onClick(v: View) {
-                mEditor.setTextBackgroundColor(if (isChanged) Color.TRANSPARENT else Color.YELLOW)
-                isChanged = !isChanged
+        findViewById<View>(R.id.action_bg_color)
+//            .setOnClickListener(object : View.OnClickListener {
+//            private var isChanged = false
+//            override fun onClick(v: View) {
+//                mEditor.setTextBackgroundColor(if (isChanged) Color.TRANSPARENT else Color.YELLOW)
+//                isChanged = !isChanged
+//            }
+//        })
+            .setOnClickListener {
+                showPopup("TextBg")
             }
-        })
 
         findViewById<ImageButton>(R.id.action_indent).setOnClickListener { mEditor.setIndent() }
 
@@ -132,36 +136,59 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun showPopup(type: String) {
+    private fun showPopup(type: String) {
         var data: Any = ""
+        var data1: Any = ""
+        var data2: Any = ""
 
         val builder = AlertDialog.Builder(this)
         val inflator = layoutInflater
-        val inputLayout = inflator.inflate(R.layout.popup_et, null)
+
+        val inputLayout = inflator.inflate(R.layout.popup_1et, null)
         val input = inputLayout.findViewById<EditText>(R.id.editTextText)
+
+        val inputLayout2 = inflator.inflate(R.layout.popup_2et, null)
+        val input1 = inputLayout2.findViewById<EditText>(R.id.editTextText_2layout)
+        val input2 = inputLayout2.findViewById<EditText>(R.id.editTextText_2layout_2)
+
+        val addExtraStart = inputLayout.findViewById<TextView>(R.id.addExtraStart)
+        val addExtraEnd = inputLayout.findViewById<TextView>(R.id.addExtraEnd)
+        val addExtraStart2 = inputLayout2.findViewById<TextView>(R.id.addExtraStart2)
+        val addExtraEnd2 = inputLayout2.findViewById<TextView>(R.id.addExtraEnd2)
 
         when (type) {
             "FontSize" -> {
                 builder.setTitle("Set Font Size")
                 input.inputType = InputType.TYPE_CLASS_NUMBER
                 input.hint = "Enter a font size from 1 to 7..."
+                input.maxLines = 1
+                builder.setView(inputLayout)
             }
             "AddLink" -> {
                 builder.setTitle("Enter link")
+                input1.inputType = InputType.TYPE_CLASS_TEXT
+                input1.hint = "Enter text to display..."
+                input2.inputType = InputType.TYPE_CLASS_TEXT
+                input2.hint = "Enter the link..."
+                builder.setView(inputLayout2)
+            }
+            "TextBg" -> {
+                builder.setTitle("Enter text color HEX")
                 input.inputType = InputType.TYPE_CLASS_TEXT
-                input.hint = "Enter the link..."
+                input.hint = "Enter color in 6 character HEX"
+                input.maxLines = 1
+                addExtraStart.text = "#"
+                builder.setView(inputLayout)
             }
             else -> Toast.makeText(this@MainActivity, "Unknown Error", Toast.LENGTH_SHORT).show()
         }
 
-        input.maxLines = 1
-
         builder.setPositiveButton("OK") { dialog, which ->
-            data = input.text.toString()
             when (type) {
                 "FontSize" -> {
+                    data = input.text.toString()
                     if (data != "" && data.toString().toInt() >= 0 && data.toString().toInt() <= 7) {
-                        setPopup(type, data, false)
+                        setPopup(type, data, null)
                     } else if (data.toString().toInt() < 0 || data.toString().toInt() > 7) {
                         Toast.makeText(this@MainActivity, "Font size should be a value from 1 and 7 only", Toast.LENGTH_SHORT).show()
                     } else {
@@ -169,9 +196,22 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 "AddLink" -> {
-                    val dataArray = mutableListOf<String>()
-                    dataArray.add(data.toString())
-                    setPopup(type, data, false)
+                    data1 = input1.text.toString()
+//                    data2 = "${input2.text.toString()}.com"
+                    data2 = input2.text.toString()
+                    if (data2.toString().contains(".")) {
+                        setPopup(type, data1, data2)
+                    } else {
+                        Toast.makeText(this@MainActivity, "Invalid URL entered", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                "TextBg" -> {
+                    data = "#${input.text.toString()}"
+                    if (input.text.length == 6) {
+                        setPopup(type, data, null)
+                    } else {
+                        Toast.makeText(this@MainActivity, "Ensure HEX is 6 characters long", Toast.LENGTH_SHORT).show()
+                    }
                 }
                 else -> Toast.makeText(this@MainActivity, "Unknown Error", Toast.LENGTH_SHORT).show()
             }
@@ -179,22 +219,28 @@ class MainActivity : AppCompatActivity() {
         builder.setNegativeButton("Cancel") { dialog, which ->
             dialog.cancel()
         }
-        builder.setView(inputLayout)
         builder.show()
     }
 
-    fun setPopup(type: String, data: Any, repeat: Boolean) {
+    private fun setPopup(type: String, data1: Any, data2: Any?) {
         val mEditor: RichEditor = findViewById(R.id.editor)
         when (type) {
             "FontSize" -> {
-                val datamodified = data.toString().toInt()
+                val datamodified = data1.toString().toInt()
                 mEditor.setFontSize(datamodified)
             }
             "AddLink" -> {
-                mEditor.insertLink(
-                    "https://home.acc-web.repl.co/",
-                    "Accorm"
-                )
+                println("$data1 ${data2.toString()}")
+                mEditor.insertLink(data2.toString(), data1.toString())
+            }
+            "TextBg" -> {
+                try {
+                    mEditor.setTextBackgroundColor(Color.parseColor(data1.toString()))
+                }
+                catch (_: Throwable) {
+                    Toast.makeText(this@MainActivity, "Unknown Color", Toast.LENGTH_SHORT).show()
+                }
+//                View.OnClickListener { mEditor.setTextBackgroundColor(Color.parseColor(data1.toString())) }
             }
             else -> Toast.makeText(this@MainActivity, "Unknown Error", Toast.LENGTH_SHORT).show()
         }
