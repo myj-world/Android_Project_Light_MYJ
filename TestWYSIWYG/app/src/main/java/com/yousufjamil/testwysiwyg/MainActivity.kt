@@ -82,13 +82,17 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<View>(R.id.action_heading6).setOnClickListener { mEditor.setHeading(6) }
 
-        findViewById<View>(R.id.action_txt_color).setOnClickListener(object : View.OnClickListener {
-            private var isChanged = false
-            override fun onClick(v: View) {
-                mEditor.setTextColor(if (isChanged) Color.BLUE else Color.BLACK)
-                isChanged = !isChanged
+        findViewById<View>(R.id.action_txt_color)
+//            .setOnClickListener(object : View.OnClickListener {
+//            private var isChanged = false
+//            override fun onClick(v: View) {
+//                mEditor.setTextColor(if (isChanged) Color.BLUE else Color.BLACK)
+//                isChanged = !isChanged
+//            }
+//        })
+            .setOnClickListener {
+                showPopup("TextColor")
             }
-        })
 
         findViewById<View>(R.id.action_bg_color)
 //            .setOnClickListener(object : View.OnClickListener {
@@ -119,10 +123,11 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.action_insert_numbers).setOnClickListener { mEditor.setNumbers() }
 
         findViewById<View>(R.id.action_insert_image).setOnClickListener {
-            mEditor.insertImage(
-                "https://home.acc-web.repl.co/algo.png",
-                "Logo", 320
-            )
+//            mEditor.insertImage(
+//                "https://home.acc-web.repl.co/algo.png",
+//                "Logo", 320
+//            )
+            showPopup("InsertImage")
         }
 
         findViewById<View>(R.id.action_insert_link).setOnClickListener {
@@ -140,6 +145,7 @@ class MainActivity : AppCompatActivity() {
         var data: Any = ""
         var data1: Any = ""
         var data2: Any = ""
+        var data3: Any = ""
 
         val builder = AlertDialog.Builder(this)
         val inflator = layoutInflater
@@ -150,6 +156,11 @@ class MainActivity : AppCompatActivity() {
         val inputLayout2 = inflator.inflate(R.layout.popup_2et, null)
         val input1 = inputLayout2.findViewById<EditText>(R.id.editTextText_2layout)
         val input2 = inputLayout2.findViewById<EditText>(R.id.editTextText_2layout_2)
+
+        val inputLayout3 = inflator.inflate(R.layout.popup_3et, null)
+        val input3 = inputLayout3.findViewById<EditText>(R.id.editTextText_3layout)
+        val input4 = inputLayout3.findViewById<EditText>(R.id.editTextText_3layout_2)
+        val input5 = inputLayout3.findViewById<EditText>(R.id.editTextText_3layout_3)
 
         val addExtraStart = inputLayout.findViewById<TextView>(R.id.addExtraStart)
         val addExtraEnd = inputLayout.findViewById<TextView>(R.id.addExtraEnd)
@@ -173,12 +184,32 @@ class MainActivity : AppCompatActivity() {
                 builder.setView(inputLayout2)
             }
             "TextBg" -> {
-                builder.setTitle("Enter text color HEX")
+                builder.setTitle("Enter text highlight color in HEX")
                 input.inputType = InputType.TYPE_CLASS_TEXT
                 input.hint = "Enter color in 6 character HEX"
                 input.maxLines = 1
                 addExtraStart.text = "#"
                 builder.setView(inputLayout)
+            }
+
+            "TextColor" -> {
+                builder.setTitle("Enter text color in HEX")
+                input.inputType = InputType.TYPE_CLASS_TEXT
+                input.hint = "Enter color in 6 character HEX"
+                input.maxLines = 1
+                addExtraStart.text = "#"
+                builder.setView(inputLayout)
+            }
+
+            "InsertImage" -> {
+                builder.setTitle("Insert Image")
+                input3.inputType = InputType.TYPE_CLASS_TEXT
+                input3.hint = "Insert Image URL..."
+                input4.inputType = InputType.TYPE_CLASS_TEXT
+                input4.hint = "Enter alternative text..."
+                input5.inputType = InputType.TYPE_CLASS_NUMBER
+                input5.hint = "Enter image width between 10 and 320..."
+                builder.setView(inputLayout3)
             }
             else -> Toast.makeText(this@MainActivity, "Unknown Error", Toast.LENGTH_SHORT).show()
         }
@@ -188,7 +219,7 @@ class MainActivity : AppCompatActivity() {
                 "FontSize" -> {
                     data = input.text.toString()
                     if (data != "" && data.toString().toInt() >= 0 && data.toString().toInt() <= 7) {
-                        setPopup(type, data, null)
+                        setPopup(type, data, null, null)
                     } else if (data.toString().toInt() < 0 || data.toString().toInt() > 7) {
                         Toast.makeText(this@MainActivity, "Font size should be a value from 1 and 7 only", Toast.LENGTH_SHORT).show()
                     } else {
@@ -200,7 +231,7 @@ class MainActivity : AppCompatActivity() {
 //                    data2 = "${input2.text.toString()}.com"
                     data2 = input2.text.toString()
                     if (data2.toString().contains(".")) {
-                        setPopup(type, data1, data2)
+                        setPopup(type, data1, data2, null)
                     } else {
                         Toast.makeText(this@MainActivity, "Invalid URL entered", Toast.LENGTH_SHORT).show()
                     }
@@ -208,9 +239,30 @@ class MainActivity : AppCompatActivity() {
                 "TextBg" -> {
                     data = "#${input.text.toString()}"
                     if (input.text.length == 6) {
-                        setPopup(type, data, null)
+                        setPopup(type, data, null, null)
                     } else {
                         Toast.makeText(this@MainActivity, "Ensure HEX is 6 characters long", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                "TextColor" -> {
+                    data = "#${input.text.toString()}"
+                    if (input.text.length == 6) {
+                        setPopup(type, data, null, null)
+                    } else {
+                        Toast.makeText(this@MainActivity, "Ensure HEX is 6 characters long", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                "InsertImage" -> {
+                    data1 = input3.text.toString()
+                    data2 = input4.text.toString()
+                    data3 = input5.text.toString()
+                    if (data1.toString().contains(".") && data3.toString().toInt() <=320 && data3.toString().toInt() >=10) {
+                        setPopup(type, data1, data2, data3)
+                    } else if (data3.toString().toInt() >=320 || data3.toString().toInt() <=10) {
+                        Toast.makeText(this@MainActivity, "Invalid width entered", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@MainActivity, "Invalid URL entered", Toast.LENGTH_SHORT).show()
                     }
                 }
                 else -> Toast.makeText(this@MainActivity, "Unknown Error", Toast.LENGTH_SHORT).show()
@@ -222,7 +274,7 @@ class MainActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private fun setPopup(type: String, data1: Any, data2: Any?) {
+    private fun setPopup(type: String, data1: Any, data2: Any?, data3: Any?) {
         val mEditor: RichEditor = findViewById(R.id.editor)
         when (type) {
             "FontSize" -> {
@@ -241,6 +293,18 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this@MainActivity, "Unknown Color", Toast.LENGTH_SHORT).show()
                 }
 //                View.OnClickListener { mEditor.setTextBackgroundColor(Color.parseColor(data1.toString())) }
+            }
+            "TextColor" -> {
+                try {
+                    mEditor.setTextColor(Color.parseColor(data1.toString()))
+                }
+                catch (_: Throwable) {
+                    Toast.makeText(this@MainActivity, "Unknown Color", Toast.LENGTH_SHORT).show()
+                }
+//                View.OnClickListener { mEditor.setTextColor(Color.parseColor(data1.toString())) }
+            }
+            "InsertImage" -> {
+                mEditor.insertImage(data1.toString(), data2.toString(), data3.toString().toInt())
             }
             else -> Toast.makeText(this@MainActivity, "Unknown Error", Toast.LENGTH_SHORT).show()
         }
