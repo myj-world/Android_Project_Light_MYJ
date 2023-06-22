@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MYJ Connect-To-Web</string>
+    <string name="open">Open Navigation Drawer</string>
+    <string name="close">Close Navigation Drawer</string>
+    <string name="no_internet">No Internet</string>
+    <string name="retry">Retry</string>
+</resources>

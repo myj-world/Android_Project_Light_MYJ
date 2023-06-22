@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item
+        android:id="@+id/home_myj"
+        android:icon="@drawable/baseline_home_24"
+        android:title="MYJ World Homepage"/>
+    <item
+        android:id="@+id/google"
+        android:icon="@drawable/baseline_search_24"
+        android:title="Search with Google"/>
+</menu>
