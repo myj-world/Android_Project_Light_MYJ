@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "634870229018",
+    "project_id": "myj-demo-apps",
+    "storage_bucket": "myj-demo-apps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634870229018:android:ace689aabce23c652ec9a3",
+        "android_client_info": {
+          "package_name": "com.yousufjamil.myjsweetfeetz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "634870229018-vot8eoeqlau5ggos01i4m5ea9rv5subm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6FY5hU4t1xZF0UQ3q2lIbTxdVcsDnKUc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "634870229018-vot8eoeqlau5ggos01i4m5ea9rv5subm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
