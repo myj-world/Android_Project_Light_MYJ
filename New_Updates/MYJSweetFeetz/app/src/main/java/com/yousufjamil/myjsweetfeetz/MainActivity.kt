@@ -3,14 +3,25 @@ package com.yousufjamil.myjsweetfeetz
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -51,14 +62,19 @@ class MainActivity : ComponentActivity() {
                                     icon = Icons.Default.Home
                                 ),
                                 BottomNavItem(
-                                    name = "Chat",
-                                    route = "chat",
-                                    icon = Icons.Default.Notifications
+                                    name = "Design",
+                                    route = "design",
+                                    icon = Icons.Default.Add
                                 ),
                                 BottomNavItem(
-                                    name = "Settings",
-                                    route = "settings",
-                                    icon = Icons.Default.Settings
+                                    name = "Feedback",
+                                    route = "feedback",
+                                    icon = Icons.Default.Create
+                                ),
+                                BottomNavItem(
+                                    name = "Profile",
+                                    route = "profile",
+                                    icon = Icons.Default.Person
                                 )
                             ),
                             navController = navController,
@@ -84,11 +100,14 @@ fun Navigation(navController: NavHostController) {
         composable("home") {
             HomeScreen()
         }
-        composable("chat") {
-            ChatScreen()
+        composable("design") {
+            DesignScreen()
         }
-        composable("settings") {
-            SettingsScreen()
+        composable("feedback") {
+            FeedbackScreen()
+        }
+        composable("profile") {
+            ProfileScreen()
         }
     }
 }
@@ -104,7 +123,7 @@ fun BottomNavigationBar(
 
     NavigationBar(
         modifier = modifier,
-        containerColor = Color.DarkGray,
+        containerColor = Color(0xFFb7ceff),
         tonalElevation = 5.dp
     ) {
         items.forEach { item ->
@@ -114,9 +133,9 @@ fun BottomNavigationBar(
                 selected = selected,
                 onClick = { onItemClick(item) },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = Color.Green,
-                    unselectedIconColor = Color.Gray,
-                    indicatorColor = Color.DarkGray
+                    selectedIconColor = Color(0xFF0e5afb),
+                    unselectedIconColor = Color(0xFF75859e),
+                    indicatorColor = Color(0xFFb7ceff)
                 ),
                 icon = {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -141,29 +160,81 @@ fun BottomNavigationBar(
 @Composable
 fun HomeScreen() {
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFd2ddf4))
+            .padding(48.dp),
+        contentAlignment = Alignment.TopCenter
     ) {
-        Text(text = "Home Screen")
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "SWEET FEETZ LTD",
+                color = Color(0xFF000000),
+                fontSize = 24.sp
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            Button(
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF3b70e0)
+                ),
+                modifier = Modifier.fillMaxWidth(0.75f)
+            ) {
+                Text(text = "Sign Up")
+            }
+            Spacer(modifier = Modifier.height(15.dp))
+            Button(
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF3b70e0)
+                ),
+                modifier = Modifier.fillMaxWidth(0.75f)
+            ) {
+                Text(text = "Log in")
+            }
+        }
     }
 }
 
 @Composable
-fun ChatScreen() {
+fun DesignScreen() {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFd2ddf4))
+            .padding(48.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "Chat Screen")
+        Text(text = "Design Screen")
     }
 }
 
 @Composable
-fun SettingsScreen() {
+fun FeedbackScreen() {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFd2ddf4))
+            .padding(48.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "Settings Screen")
+        Text(text = "Feedback Screen")
+    }
+}
+
+@Composable
+fun ProfileScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFd2ddf4))
+            .padding(48.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = "Profile Screen")
     }
 }
