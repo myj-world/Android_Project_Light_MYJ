@@ -30,6 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
@@ -75,6 +76,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.yousufjamil.sweetfeetzltd.ui.theme.MYJSweetFeetzTheme
@@ -174,6 +176,9 @@ fun Navigation(context: Context, navController: NavHostController) {
         }
         composable("feedbacksent") {
             FeedbackSuccessScreen()
+        }
+        composable("sock") {
+            SockScreen(context)
         }
     }
 }
@@ -346,7 +351,34 @@ fun DesignScreen() {
             .padding(48.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "Design Screen")
+        if (firebaseAuth.currentUser != null) {
+            Button(
+                onClick = { navController.navigate("sock") },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF3b70e0)
+                ),
+                modifier = Modifier.fillMaxWidth(0.75f)
+            ) {
+                val sockIcon = Icons.Default.Face
+                Icon(imageVector = sockIcon, contentDescription = "Create sock")
+                Text(text = "Create sock", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+            }
+        } else {
+            Text(text = "Please log in first")
+        }
+    }
+}
+
+@Composable
+fun SockScreen(context: Context) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFd2ddf4))
+            .padding(48.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = "Please log in first")
     }
 }
 
@@ -360,18 +392,18 @@ fun FeedbackScreen(context: Context) {
         mutableStateOf("")
     }
 
-    val database = Firebase.database
-    val emailRef = database.getReference("email")
-    val ratingRef = database.getReference("rating")
-    val feedbackRef = database.getReference("feedback")
+    val database = FirebaseDatabase.getInstance().reference
 
     fun postFeedback() {
         try {
             if (rating.toInt() in 1..5) {
                 if (feedback.trim().isNotEmpty()) {
-                    emailRef.setValue(firebaseAuth.currentUser!!.email)
-                    ratingRef.setValue(rating)
-                    feedbackRef.setValue(feedback)
+                    var hashMapFeedback = HashMap<String, String>()
+                    hashMapFeedback["email"] = "${firebaseAuth.currentUser!!.email}"
+                    hashMapFeedback["rating"] = rating
+                    hashMapFeedback["feedback"] = feedback
+
+                    database.child("Feedback").push().setValue(hashMapFeedback)
 
                     navController.navigate("feedbacksent")
                 } else {
