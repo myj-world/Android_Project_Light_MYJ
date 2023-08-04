@@ -17,6 +17,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,6 +41,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -77,7 +79,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.yousufjamil.sweetfeetzltd.ui.theme.MYJSweetFeetzTheme
 import kotlinx.coroutines.launch
@@ -179,6 +180,9 @@ fun Navigation(context: Context, navController: NavHostController) {
         }
         composable("sock") {
             SockScreen(context)
+        }
+        composable("final") {
+            FinalSock(context)
         }
     }
 }
@@ -360,7 +364,7 @@ fun DesignScreen() {
                 modifier = Modifier.fillMaxWidth(0.75f)
             ) {
                 val sockIcon = Icons.Default.Face
-                Icon(imageVector = sockIcon, contentDescription = "Create sock")
+                Icon(imageVector = sockIcon, contentDescription = "Create a sock")
                 Text(text = "Create sock", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
             }
         } else {
@@ -371,15 +375,92 @@ fun DesignScreen() {
 
 @Composable
 fun SockScreen(context: Context) {
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFd2ddf4))
             .padding(48.dp),
-        contentAlignment = Alignment.Center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Please log in first")
+        val sockIcon = Icons.Default.Face
+        var selectedTypePlain by remember { mutableStateOf(false) }
+        var selectedTypeStriped by remember { mutableStateOf(false) }
+        var selectedColourBlackWhite by remember { mutableStateOf(false) }
+        var selectedColourColoured by remember { mutableStateOf(false) }
+
+        Icon(imageVector = sockIcon, contentDescription = "Create a sock", modifier = Modifier.size(90.dp))
+        Title(text = "Create a sock")
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Column (
+            modifier = Modifier
+                .background(Color(0xFFFFFFFF))
+                .padding(20.dp)
+        ) {
+            Text(text = "What kind of sock would you like?")
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                RadioButton(selected = selectedTypePlain, onClick = {
+                    selectedTypePlain = true
+                    selectedTypeStriped = false
+                })
+                Text(text = "Plain")
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                RadioButton(selected = selectedTypeStriped, onClick = {
+                    selectedTypePlain = false
+                    selectedTypeStriped = true
+                })
+                Text(text = "Striped")
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Text(text = "What colour of sock would you like?")
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                RadioButton(selected = selectedColourBlackWhite, onClick = {
+                    selectedColourBlackWhite = true
+                    selectedColourColoured = false
+                })
+                Text(text = "Black & White")
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                RadioButton(selected = selectedColourColoured, onClick = {
+                    selectedColourBlackWhite = false
+                    selectedColourColoured = true
+                })
+                Text(text = "Coloured")
+            }
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                onClick = {
+                    navController.navigate("final")
+                }
+            ) {
+                Text(text = "Get sock")
+            }
+        }
     }
+}
+
+@Composable
+fun FinalSock(context: Context) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFd2ddf4))
+            .padding(48.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {}
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -439,7 +520,8 @@ fun FeedbackScreen(context: Context) {
                     containerColor = Color(0xFFFFFFFF),
                     textColor = Color(0xFF000000)
                 ),
-                modifier = Modifier.fillMaxWidth(0.85f)
+                modifier = Modifier.fillMaxWidth(0.85f),
+                singleLine = true
             )
             Spacer(modifier = Modifier.height(5.dp))
             Text(text = "Please enter a rating between 1 and 5 inclusive.",
@@ -635,7 +717,8 @@ fun SignupScreen(context: Context) {
             onValueChange = {
                 currentEmail = it
             },
-            modifier = Modifier.fillMaxWidth(0.85f)
+            modifier = Modifier.fillMaxWidth(0.85f),
+            singleLine = true
         )
         Spacer(modifier = Modifier.height(10.dp))
         TextField(
@@ -652,7 +735,8 @@ fun SignupScreen(context: Context) {
                 textColor = Color(0xFF000000)
             ),
             modifier = Modifier.fillMaxWidth(0.85f),
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            singleLine = true
         )
         Spacer(modifier = Modifier.height(10.dp))
         TextField(
@@ -669,7 +753,8 @@ fun SignupScreen(context: Context) {
                 textColor = Color(0xFF000000)
             ),
             modifier = Modifier.fillMaxWidth(0.85f),
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            singleLine = true
         )
         Spacer(modifier = Modifier.height(10.dp))
         Button(
@@ -739,7 +824,8 @@ fun LoginScreen(context: Context) {
                 containerColor = Color(0xFFFFFFFF),
                 textColor = Color(0xFF000000)
             ),
-            modifier = Modifier.fillMaxWidth(0.85f)
+            modifier = Modifier.fillMaxWidth(0.85f),
+            singleLine = true
         )
         Spacer(modifier = Modifier.height(10.dp))
         TextField(
@@ -756,7 +842,8 @@ fun LoginScreen(context: Context) {
                 textColor = Color(0xFF000000)
             ),
             modifier = Modifier.fillMaxWidth(0.85f),
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            singleLine = true
         )
         Spacer(modifier = Modifier.height(5.dp))
         Box(
@@ -843,7 +930,8 @@ fun ForgotPassword(context: Context) {
                 containerColor = Color(0xFFFFFFFF),
                 textColor = Color(0xFF000000)
             ),
-            modifier = Modifier.fillMaxWidth(0.85f)
+            modifier = Modifier.fillMaxWidth(0.85f),
+            singleLine = true
         )
         Spacer(modifier = Modifier.height(10.dp))
         Button(
