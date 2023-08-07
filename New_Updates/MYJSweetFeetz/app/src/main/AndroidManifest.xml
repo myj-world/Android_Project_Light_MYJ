@@ -26,20 +26,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".notifications.FirebaseNotificationMsgService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-                <action android:name="com.google.android.c2dm.intent.RECIEVE" />
-            </intent-filter>
-        </service>
-
-<!--        <service android:name=".notifications.FirebaseNotificationInstanceIDService"-->
+<!--        <service android:name=".notifications.FirebaseNotificationMsgService"-->
 <!--            android:exported="true">-->
 <!--            <intent-filter>-->
-<!--                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />-->
+<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
+<!--                <action android:name="com.google.android.c2dm.intent.RECIEVE" />-->
 <!--            </intent-filter>-->
 <!--        </service>-->
+
+<!--&lt;!&ndash;        <service android:name=".notifications.FirebaseNotificationInstanceIDService"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:exported="true">&ndash;&gt;-->
+<!--&lt;!&ndash;            <intent-filter>&ndash;&gt;-->
+<!--&lt;!&ndash;                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />&ndash;&gt;-->
+<!--&lt;!&ndash;            </intent-filter>&ndash;&gt;-->
+<!--&lt;!&ndash;        </service>&ndash;&gt;-->
     </application>
 
 </manifest>

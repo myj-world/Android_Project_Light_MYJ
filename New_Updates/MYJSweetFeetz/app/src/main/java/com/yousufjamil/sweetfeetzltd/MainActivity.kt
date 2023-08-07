@@ -1,5 +1,6 @@
 package com.yousufjamil.sweetfeetzltd
 
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -180,9 +181,6 @@ fun Navigation(context: Context, navController: NavHostController) {
         }
         composable("sock") {
             SockScreen(context)
-        }
-        composable("final") {
-            FinalSock(context)
         }
     }
 }
@@ -387,80 +385,124 @@ fun SockScreen(context: Context) {
         var selectedTypeStriped by remember { mutableStateOf(false) }
         var selectedColourBlackWhite by remember { mutableStateOf(false) }
         var selectedColourColoured by remember { mutableStateOf(false) }
+        var blackOrWhite by remember { mutableStateOf("") }
+        var showSock by remember { mutableStateOf(false) }
 
-        Icon(imageVector = sockIcon, contentDescription = "Create a sock", modifier = Modifier.size(90.dp))
-        Title(text = "Create a sock")
+        if (!showSock) {
+            Icon(
+                imageVector = sockIcon,
+                contentDescription = "Create a sock",
+                modifier = Modifier.size(90.dp)
+            )
+            Title(text = "Create a sock")
 
-        Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-        Column (
-            modifier = Modifier
-                .background(Color(0xFFFFFFFF))
-                .padding(20.dp)
-        ) {
-            Text(text = "What kind of sock would you like?")
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier
+                    .background(Color(0xFFFFFFFF))
+                    .padding(20.dp)
             ) {
-                RadioButton(selected = selectedTypePlain, onClick = {
-                    selectedTypePlain = true
-                    selectedTypeStriped = false
-                })
-                Text(text = "Plain")
+                Text(text = "What kind of sock would you like?")
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(selected = selectedTypePlain, onClick = {
+                        selectedTypePlain = true
+                        selectedTypeStriped = false
+                    })
+                    Text(text = "Plain")
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(selected = selectedTypeStriped, onClick = {
+                        selectedTypePlain = false
+                        selectedTypeStriped = true
+                    })
+                    Text(text = "Striped")
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Text(text = "What colour of sock would you like?")
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(selected = selectedColourBlackWhite, onClick = {
+                        selectedColourBlackWhite = true
+                        selectedColourColoured = false
+                    })
+                    Text(text = "Black & White")
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(selected = selectedColourColoured, onClick = {
+                        selectedColourBlackWhite = false
+                        selectedColourColoured = true
+                    })
+                    Text(text = "Coloured")
+                }
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF3b70e0)
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        if (selectedTypePlain || selectedTypeStriped && selectedColourBlackWhite || selectedColourColoured) {
+                            showSock = true
+                        } else {
+                            Toast.makeText(context, "Please ensure all the questions are answered", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                ) {
+                    Text(text = "Get sock")
+                }
             }
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                RadioButton(selected = selectedTypeStriped, onClick = {
-                    selectedTypePlain = false
-                    selectedTypeStriped = true
-                })
-                Text(text = "Striped")
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Text(text = "What colour of sock would you like?")
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                RadioButton(selected = selectedColourBlackWhite, onClick = {
-                    selectedColourBlackWhite = true
-                    selectedColourColoured = false
-                })
-                Text(text = "Black & White")
-            }
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                RadioButton(selected = selectedColourColoured, onClick = {
-                    selectedColourBlackWhite = false
-                    selectedColourColoured = true
-                })
-                Text(text = "Coloured")
+        } else {
+            if (selectedTypeStriped && selectedColourColoured) {
+                Image(painter = painterResource(id = R.drawable.colour_stripe_socks), contentDescription = "Striped Coloured socks", modifier = Modifier.size(300.dp))
+            } else if (selectedTypeStriped && selectedColourBlackWhite) {
+                Image(painter = painterResource(id = R.drawable.black_white_stripe_socks), contentDescription = "Striped Black and White Socks", modifier = Modifier.size(300.dp))
+            } else if (selectedTypePlain && selectedColourColoured) {
+                Image(painter = painterResource(id = R.drawable.colourful_normal_socks), contentDescription = "Coloured Plain Socks", modifier = Modifier.size(300.dp))
+            } else if (selectedTypePlain && selectedColourBlackWhite) {
+                AlertDialog.Builder(context)
+                    .setTitle("Choose sock colour")
+                    .setMessage("Do you want black or white plain socks?\n\nIf this popup repeats again and again, please click the back button")
+                    .setNegativeButton("Black") {_, _ ->
+                        blackOrWhite = "Black"
+                    }
+                    .setPositiveButton("White") {_, _ ->
+                        blackOrWhite = "White"
+                    }
+                    .show()
+                when (blackOrWhite) {
+                    "Black" -> {
+                        Image(painter = painterResource(id = R.drawable.black_socks), contentDescription = "Black socks", modifier = Modifier.size(300.dp))
+                    }
+                    "White" -> {
+                        Image(painter = painterResource(id = R.drawable.white_socks), contentDescription = "White Socks", modifier = Modifier.size(300.dp))
+                    }
+                    else -> {
+                        Toast.makeText(context, "Unknown Error", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } else {
+                Toast.makeText(context, "Unknown Error", Toast.LENGTH_SHORT).show()
             }
             Button(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                onClick = {
-                    navController.navigate("final")
-                }
+                onClick = { navController.navigate("home") },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF3b70e0)
+                ),
+                modifier = Modifier.fillMaxWidth(0.75f)
             ) {
-                Text(text = "Get sock")
+                Text(text = "Back to home")
             }
         }
     }
-}
-
-@Composable
-fun FinalSock(context: Context) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFd2ddf4))
-            .padding(48.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {}
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
