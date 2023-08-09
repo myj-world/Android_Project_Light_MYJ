@@ -1,8 +1,9 @@
 package com.yousufjamil.qiblafinder
 
 import android.Manifest
-import android.content.IntentSender
+import android.R.attr.country
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.widget.Toast
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,20 +24,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationSettingsRequest
-import com.google.android.gms.location.LocationSettingsStatusCodes
+import java.io.IOException
+import java.util.Locale
+
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var locationRequest: LocationRequest
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private var longitude = 0.0
-    private var latitude = 0.0
+    private var longitude = 2468.0
+    private var latitude = 2468.0
     private var bearTo = 0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +53,7 @@ class MainActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                    if (longitude != 2468.0 && latitude != 2468.0) {
+//                    if (longitude != 2468.0 && latitude != 2468.0) {
                         val userLoc = Location("service Provider")
                         userLoc.longitude = longitude
                         userLoc.latitude = latitude
@@ -78,10 +77,9 @@ class MainActivity : ComponentActivity() {
                         )
                         Text(text = "Ensure you are pointing your device northwards to get exact Qiblah.", textAlign = TextAlign.Center)
 
-                    } else {
-                        Toast.makeText(applicationContext, "Couldn't retrieve location1", Toast.LENGTH_SHORT).show()
-                        Text(text = "Couldn't retrieve location.")
-                    }
+//                    } else {
+//                        Text(text = "Couldn't retrieve location.")
+//                    }
             }
         }
     }
@@ -95,39 +93,56 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun checkGPS() {
-        locationRequest = LocationRequest.create()
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.interval = 5000
-        locationRequest.fastestInterval = 2000
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationProviderClient.lastLocation
+                .addOnSuccessListener { location ->
+                    if (location != null) {
+                        latitude = location.latitude
+                        longitude = location.longitude
 
-        val builder = LocationSettingsRequest.Builder()
-            .addLocationRequest(locationRequest)
-
-        builder.setAlwaysShow(true)
-
-        val result = LocationServices.getSettingsClient(this.applicationContext)
-            .checkLocationSettings(builder.build())
-
-        result.addOnCompleteListener {task ->
-            try {
-                val response = task.getResult(ApiException::class.java)
-
-                getUserLocation()
-            } catch (e: ApiException) {
-                when (e.statusCode) {
-                    LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> try {
-                        val resolveApiException = e as ResolvableApiException
-                        resolveApiException.startResolutionForResult(this, 200)
-                    } catch (sendIntentException: IntentSender.SendIntentException) {
-                        Toast.makeText(this, "Couldn't retrieve location", Toast.LENGTH_SHORT).show()
-                    }
-                    LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
-                        Toast.makeText(this, "Couldn't retrieve location", Toast.LENGTH_SHORT).show()
+                    } else {
+                        latitude = 2468.0
+                        longitude = 2468.0
                     }
                 }
-                Toast.makeText(this, "Couldn't retrieve location", Toast.LENGTH_SHORT).show()
-            }
+                .addOnFailureListener {
+                    println("Errorss $it")
+                }
         }
+
+//        locationRequest = LocationRequest.create()
+//        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+//        locationRequest.interval = 5000
+//        locationRequest.fastestInterval = 2000
+//
+//        val builder = LocationSettingsRequest.Builder()
+//            .addLocationRequest(locationRequest)
+//
+//        builder.setAlwaysShow(true)
+//
+//        val result = LocationServices.getSettingsClient(this.applicationContext)
+//            .checkLocationSettings(builder.build())
+//
+//        result.addOnCompleteListener {task ->
+//            try {
+//                val response = task.getResult(ApiException::class.java)
+//
+//                getUserLocation()
+//            } catch (e: ApiException) {
+//                when (e.statusCode) {
+//                    LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> try {
+//                        val resolveApiException = e as ResolvableApiException
+//                        resolveApiException.startResolutionForResult(this, 200)
+//                    } catch (sendIntentException: IntentSender.SendIntentException) {
+//                        Toast.makeText(this, "Couldn't retrieve location", Toast.LENGTH_SHORT).show()
+//                    }
+//                    LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
+//                        Toast.makeText(this, "Couldn't retrieve location", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//                Toast.makeText(this, "Couldn't retrieve location", Toast.LENGTH_SHORT).show()
+//            }
+//        }
     }
 
     private fun getUserLocation() {
