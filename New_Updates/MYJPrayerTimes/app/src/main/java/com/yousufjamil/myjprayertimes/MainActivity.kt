@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +27,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.postDelayed
@@ -58,7 +64,8 @@ class MainActivity : ComponentActivity() {
 
             if (fajr == "" && statusMessage == "") {
                 Column (
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                         .padding(recompose.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -99,17 +106,27 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                         modifier = Modifier.fillMaxWidth(0.85f)) {
-                        Text(text = "Get city")
+                        Text(text = "Get Prayer Times")
                     }
                 }
             } else {
                 Column (
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                         .padding(recompose.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     if (statusMessage == "") {
+
+                        Image(
+                            painter = painterResource(id = R.drawable.icon),
+                            contentDescription = "Logo",
+                            modifier = Modifier
+                                .width(100.dp)
+                                .height(100.dp),
+                            contentScale = ContentScale.FillBounds
+                        )
                         Text(text = "City: $city")
                         Text(text = "Date: $date")
                         Text(text = "Fajr: $fajr")

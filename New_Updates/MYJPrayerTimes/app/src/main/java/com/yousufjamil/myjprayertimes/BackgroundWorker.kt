@@ -20,9 +20,6 @@ class BackgroundWorker(val context: Context, val city: String): AsyncTask<Void, 
     val mProgress = ProgressDialog(context)
     var finalresult: String? = ""
     override fun onPreExecute() {
-//        backgroundWorker(MainActivity())
-//        alertDialog = AlertDialog.Builder(context).create()
-//        alertDialog.setTitle("Message Recieved")
 
         super.onPreExecute()
 
@@ -37,14 +34,6 @@ class BackgroundWorker(val context: Context, val city: String): AsyncTask<Void, 
             val url = URL(BASE_URL+city)
             val con = url.openConnection() as HttpURLConnection
             con.requestMethod = "GET"
-//            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-//            con.doOutput = true
-//
-//            val outputStream = con.outputStream
-//            val wr = OutputStreamWriter(outputStream)
-//            println(URLEncoder.encode("id", "UTF-8")+"="+URLEncoder.encode(idToFind, "UTF-8"))
-//            wr.write(URLEncoder.encode("id", "UTF-8")+"="+URLEncoder.encode(idToFind, "UTF-8"))
-//            wr.flush();
 
             var status: Any? = con.responseCode
             println(status)
