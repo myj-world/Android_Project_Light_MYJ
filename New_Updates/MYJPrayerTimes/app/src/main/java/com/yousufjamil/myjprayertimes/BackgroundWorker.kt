@@ -27,7 +27,7 @@ class BackgroundWorker(val context: Context, val city: String): AsyncTask<Void, 
         super.onPreExecute()
 
         mProgress.setCancelable(false)
-        mProgress.setMessage("Recieving data...")
+        mProgress.setMessage("Loading...")
         mProgress.show()
     }
 
@@ -73,16 +73,11 @@ class BackgroundWorker(val context: Context, val city: String): AsyncTask<Void, 
 
         mProgress.hide()
 
-//        val showRecieved = AlertDialog.Builder(context)
         if (result != "") {
-//            showRecieved.setMessage("Recieved: $result")
             finalresult = result
         } else {
-//            showRecieved.setMessage("None Found")
             finalresult = "Error"
         }
-//        showRecieved.setPositiveButton("OK") {_, _ -> }
-//        showRecieved.show()
 
         super.onPostExecute(result)
     }
