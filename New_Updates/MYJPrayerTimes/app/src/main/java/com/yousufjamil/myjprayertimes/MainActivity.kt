@@ -5,6 +5,7 @@ import android.os.Handler
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -76,7 +77,7 @@ class MainActivity : ComponentActivity() {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(recompose.dp),
+                        .padding((recompose.dp - recompose.dp)),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -122,17 +123,18 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             } else {
-                Box (modifier = Modifier.fillMaxSize()) {
+                Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Image(painter = painterResource(id = R.drawable.bg), contentDescription = "Background", modifier = Modifier.matchParentSize(), contentScale = ContentScale.Crop)
                     Column(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(recompose.dp),
+                            .fillMaxWidth(0.7f)
+                            .padding((recompose.dp - recompose.dp))
+                            .background(Color(0xFFFFFFFF)),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         if (statusMessage == "") {
-
+                            Spacer(modifier = Modifier.height(20.dp))
                             Image(
                                 painter = painterResource(id = R.drawable.icon),
                                 contentDescription = "Logo",
@@ -253,6 +255,7 @@ class MainActivity : ComponentActivity() {
                                 fontFamily = barlow,
                                 fontWeight = FontWeight.Medium
                             )
+                            Spacer(modifier = Modifier.height(20.dp))
                         } else {
                             Text(
                                 text = "Error: $statusMessage",
