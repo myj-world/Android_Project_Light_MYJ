@@ -7,7 +7,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,6 +32,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.postDelayed
@@ -54,6 +60,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val barlow = FontFamily(
+            Font(R.font.barlow_med, FontWeight.Medium)
+        )
+
         setContent {
             var inputCity by remember {
                 mutableStateOf("")
@@ -63,7 +73,7 @@ class MainActivity : ComponentActivity() {
             }
 
             if (fajr == "" && statusMessage == "") {
-                Column (
+                Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(recompose.dp),
@@ -73,7 +83,7 @@ class MainActivity : ComponentActivity() {
                     TextField(
                         value = inputCity,
                         label = {
-                            Text(text = "Enter your city name...")
+                            Text(text = "City")
                         },
                         onValueChange = {
                             inputCity = it
@@ -82,61 +92,174 @@ class MainActivity : ComponentActivity() {
                         singleLine = true
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    Button(onClick = {
-                        statusMessage = ""
+                    Button(
+                        onClick = {
+                            statusMessage = ""
 
-                        backgroundWorker = BackgroundWorker(this@MainActivity, inputCity)
-                        backgroundWorker.execute()
+                            backgroundWorker = BackgroundWorker(this@MainActivity, inputCity)
+                            backgroundWorker.execute()
 
-                        checkStatus()
+                            checkStatus()
 
-                        city = "Loading..."
-                        date = "Loading..."
-                        fajr = "Loading..."
-                        ishraq = "Loading..."
-                        dhuhr = "Loading..."
-                        asr = "Loading..."
-                        maghrib = "Loading..."
-                        isha = "Loading..."
+                            city = "Loading..."
+                            date = "Loading..."
+                            fajr = "Loading..."
+                            ishraq = "Loading..."
+                            dhuhr = "Loading..."
+                            asr = "Loading..."
+                            maghrib = "Loading..."
+                            isha = "Loading..."
 
-                        if (recompose <= 10) {
-                            recompose++
-                        } else {
-                            recompose--
-                        }
-                    },
-                        modifier = Modifier.fillMaxWidth(0.85f)) {
+                            if (recompose <= 10) {
+                                recompose++
+                            } else {
+                                recompose--
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(0.85f)
+                    ) {
                         Text(text = "Get Prayer Times")
                     }
                 }
             } else {
-                Column (
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(recompose.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    if (statusMessage == "") {
+                Box (modifier = Modifier.fillMaxSize()) {
+                    Image(painter = painterResource(id = R.drawable.bg), contentDescription = "Background", modifier = Modifier.matchParentSize(), contentScale = ContentScale.Crop)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(recompose.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        if (statusMessage == "") {
 
-                        Image(
-                            painter = painterResource(id = R.drawable.icon),
-                            contentDescription = "Logo",
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(100.dp),
-                            contentScale = ContentScale.FillBounds
-                        )
-                        Text(text = "City: $city")
-                        Text(text = "Date: $date")
-                        Text(text = "Fajr: $fajr")
-                        Text(text = "Sharooq: $ishraq")
-                        Text(text = "Dhuhr: $dhuhr")
-                        Text(text = "Asr: $asr")
-                        Text(text = "Maghrib: $maghrib")
-                        Text(text = "Isha: $isha")
-                    } else {
-                        Text(text = "Error: $statusMessage")
+                            Image(
+                                painter = painterResource(id = R.drawable.icon),
+                                contentDescription = "Logo",
+                                modifier = Modifier
+                                    .width(100.dp)
+                                    .height(100.dp),
+                                contentScale = ContentScale.FillBounds
+                            )
+
+                            Text(
+                                text = "City:",
+                                modifier = Modifier.fillMaxWidth(0.4f),
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text(
+                                text = city,
+                                modifier = Modifier.fillMaxWidth(0.4f),
+                                textAlign = TextAlign.End,
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+
+                            Text(
+                                text = "Date:",
+                                modifier = Modifier.fillMaxWidth(0.4f),
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text(
+                                text = date,
+                                modifier = Modifier.fillMaxWidth(0.4f),
+                                textAlign = TextAlign.End,
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+
+                            Text(
+                                text = "Fajr:",
+                                modifier = Modifier.fillMaxWidth(0.4f),
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text(
+                                text = fajr,
+                                modifier = Modifier.fillMaxWidth(0.4f),
+                                textAlign = TextAlign.End,
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+
+                            Text(
+                                text = "Sharooq:",
+                                modifier = Modifier.fillMaxWidth(0.4f),
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text(
+                                text = ishraq,
+                                modifier = Modifier.fillMaxWidth(0.4f),
+                                textAlign = TextAlign.End,
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+
+                            Text(
+                                text = "Dhuhr:",
+                                modifier = Modifier.fillMaxWidth(0.4f),
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text(
+                                text = dhuhr,
+                                modifier = Modifier.fillMaxWidth(0.4f),
+                                textAlign = TextAlign.End,
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+
+                            Text(
+                                text = "Asr:",
+                                modifier = Modifier.fillMaxWidth(0.4f),
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text(
+                                text = asr,
+                                modifier = Modifier.fillMaxWidth(0.4f),
+                                textAlign = TextAlign.End,
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+
+                            Text(
+                                text = "Maghrib:",
+                                modifier = Modifier.fillMaxWidth(0.4f),
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text(
+                                text = maghrib,
+                                modifier = Modifier.fillMaxWidth(0.4f),
+                                textAlign = TextAlign.End,
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+
+                            Text(
+                                text = "Isha:",
+                                modifier = Modifier.fillMaxWidth(0.4f),
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text(
+                                text = isha,
+                                modifier = Modifier.fillMaxWidth(0.4f),
+                                textAlign = TextAlign.End,
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+                        } else {
+                            Text(
+                                text = "Error: $statusMessage",
+                                fontFamily = barlow,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
                     }
                 }
                 Handler().postDelayed(
@@ -177,7 +300,8 @@ class MainActivity : ComponentActivity() {
                     val result = backgroundWorker.finalresult
                     val jsonPars = JSONObject(result!!)
                     statusMessage = jsonPars.getString("Error")
-                } catch (_: JSONException) {}
+                } catch (_: JSONException) {
+                }
             } else {
                 checkStatus()
             }
