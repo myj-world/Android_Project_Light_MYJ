@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1096583429906",
+    "project_id": "myj-chit-chat",
+    "storage_bucket": "myj-chit-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1096583429906:android:9309d456da8faaefd3bdcb",
+        "android_client_info": {
+          "package_name": "com.yousufjamil.myjchitchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1096583429906-dpl0meqhg6i8q7siamu243abjvddjlc5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCF20YIsZlOua54PS5hy_RHPnNCQfQXoA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1096583429906-dpl0meqhg6i8q7siamu243abjvddjlc5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
