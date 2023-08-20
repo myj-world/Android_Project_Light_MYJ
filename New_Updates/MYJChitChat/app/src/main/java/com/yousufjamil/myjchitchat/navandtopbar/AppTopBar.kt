@@ -22,7 +22,7 @@ fun AppTopBar (
                 Text(text = stringResource(id = R.string.app_name))
         },
         navigationIcon = {
-            IconButton(onClick = { onNavigationIconClick }) {
+            IconButton(onClick = { onNavigationIconClick() }) {
                 Icon(imageVector = Icons.Default.Menu, contentDescription = "Toggle navigation bar")
             }
         },
