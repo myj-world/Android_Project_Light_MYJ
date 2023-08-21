@@ -2,7 +2,6 @@ package com.yousufjamil.myjchitchat
 
 import android.app.ProgressDialog
 import android.content.Context
-import android.graphics.fonts.FontStyle
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
@@ -21,10 +20,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -66,10 +65,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.yousufjamil.myjchitchat.chatretrieve.Message
 import com.yousufjamil.myjchitchat.navandtopbar.AppTopBar
 import com.yousufjamil.myjchitchat.navandtopbar.MenuItem
 import com.yousufjamil.myjchitchat.ui.theme.MYJChitChatTheme
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Random
 
 lateinit var firebaseAuth: FirebaseAuth
@@ -79,6 +85,9 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        firebaseAuth = FirebaseAuth.getInstance()
+
         setContent {
             MYJChitChatTheme {
                 navigator = rememberNavController()
@@ -93,12 +102,12 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxWidth(0.8f)
                         ) {
                             Column {
-                                DrawerHeader() {
+                                DrawerHeader(context = this@MainActivity) {
                                     scope.launch { drawerState.close() }
                                 }
                                 DrawerBody(
                                     items = listOf(
-                                        MenuItem("home", "Home", Icons.Default.Home, "Home icon")
+                                        MenuItem("home", "Home")
                                     ),
                                     modifier = Modifier
                                         .padding(10.dp, 20.dp),
@@ -165,7 +174,10 @@ fun Navigation(context: Context, navController: NavHostController) {
 }
 
 @Composable
-fun DrawerHeader(onItemClick: () -> Unit) {
+fun DrawerHeader(context: Context, onItemClick: () -> Unit) {
+    var done by remember {
+        mutableStateOf(false)
+    }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -177,18 +189,93 @@ fun DrawerHeader(onItemClick: () -> Unit) {
                 .padding(top = 30.dp)
                 .fillMaxWidth()
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.profiledefault),
-                contentDescription = "Default profile logo",
-                modifier = Modifier.padding(horizontal = 22.dp)
-            )
+            if (firebaseAuth.currentUser != null) {
+                Row {
+                    var photo = firebaseAuth.currentUser!!.photoUrl.toString()
+                    var name by remember {
+                        mutableStateOf("light0")
+                    }
+                    var color by remember {
+                        mutableStateOf("#ffffff")
+                    }
+
+                    if (!done) {
+                        try {
+                            if (photo.contains("profiledefault")) {
+                                name = photo.substring(0, 14)
+                                name = name.trim()
+                                println("tests: $name")
+
+                                photo = photo.removeRange(0, 15)
+                                color = photo
+                                println("tests: $color")
+                            } else {
+                                if (photo.substring(6, 7) == " ") {
+                                    name = photo.substring(0, 6)
+                                    name = name.trim()
+                                    println("tests: $name")
+
+                                    photo = photo.removeRange(0, 7)
+                                    color = photo
+                                } else {
+                                    name = photo.substring(0, 7)
+                                    name = name.trim()
+                                    println("tests: $name")
+
+                                    photo = photo.removeRange(0, 8)
+                                    color = photo
+                                }
+                            }
+                        } catch (e: Throwable) {
+                            Toast.makeText(context, e.stackTraceToString(), Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                        done = true
+                    }
+
+                    val photoId = context.resources.getIdentifier(
+                        name,
+                        "drawable",
+                        context.packageName
+                    )
+                    Image(
+                        painter = painterResource(id = photoId),
+                        contentDescription = "Default profile logo",
+                        modifier = Modifier
+                            .padding(start = 22.dp, end = 10.dp)
+                            .background(Color(android.graphics.Color.parseColor(color)))
+                            .width(70.dp)
+                    )
+                    Column {
+                        Text(
+                            text = firebaseAuth.currentUser!!.displayName.toString(),
+                            color = Color(0xFFFFFFFF)
+                        )
+                        Text(
+                            text = firebaseAuth.currentUser!!.email.toString(),
+                            color = Color(0xFFFFFFFF)
+                        )
+                    }
+                }
+            } else {
+                Image(
+                    painter = painterResource(id = R.drawable.profiledefault),
+                    contentDescription = "Default profile logo",
+                    modifier = Modifier.padding(horizontal = 22.dp)
+                )
+            }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(
                     onClick = {
-                        navigator.navigate("login")
+                        if (firebaseAuth.currentUser != null) {
+                            firebaseAuth.signOut()
+                            navigator.navigate("home")
+                        } else {
+                            navigator.navigate("login")
+                        }
                         onItemClick()
                     },
                     colors = ButtonDefaults.buttonColors(
@@ -196,7 +283,11 @@ fun DrawerHeader(onItemClick: () -> Unit) {
                     ),
                     modifier = Modifier.padding(start = 5.dp)
                 ) {
-                    Text(text = "Login")
+                    if (firebaseAuth.currentUser != null) {
+                        Text(text = "Logout")
+                    } else {
+                        Text(text = "Login")
+                    }
                 }
                 IconButton(onClick = {
                     onItemClick()
@@ -221,26 +312,31 @@ fun DrawerBody(
     onItemClick: (MenuItem) -> Unit
 ) {
     var selected by remember { mutableStateOf("Home") }
-    Column(modifier = modifier) {
-        items.forEach { item ->
-            NavigationDrawerItem(
-                icon = {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = item.contentDescription
+    var uid by remember { mutableStateOf("Please Log In") }
+    if (firebaseAuth.currentUser != null) {
+        uid = firebaseAuth.uid.toString()
+    }
+
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column {
+            items.forEach { item ->
+                NavigationDrawerItem(
+                    label = { Text(text = item.title) },
+                    selected = item.title == selected,
+                    onClick = {
+                        onItemClick(item)
+                        selected = item.title
+                    },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        selectedContainerColor = Color(0xFFD3E8FF)
                     )
-                },
-                label = { Text(text = item.title) },
-                selected = item.title == selected,
-                onClick = {
-                    onItemClick(item)
-                    selected = item.title
-                },
-                colors = NavigationDrawerItemDefaults.colors(
-                    selectedContainerColor = Color(0xFFD3E8FF)
                 )
-            )
+            }
         }
+        Text(text = "User id: $uid", modifier = Modifier.padding(10.dp))
     }
 }
 
@@ -279,6 +375,9 @@ fun LoginScreen(context: Context) {
                 Toast.LENGTH_SHORT
             ).show()
         }
+    }
+    if (firebaseAuth.currentUser != null) {
+        navigator.navigate("home")
     }
 
     Column(
@@ -397,6 +496,10 @@ fun ForgotPassword(context: Context) {
         firebaseAuth.sendPasswordResetEmail(currentEmail)
     }
 
+    if (firebaseAuth.currentUser != null) {
+        navigator.navigate("home")
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -444,6 +547,10 @@ fun ResetEmailSent(context: Context) {
     ) {
         val iconCheck = Icons.Default.Check
 
+        if (firebaseAuth.currentUser != null) {
+            navigator.navigate("home")
+        }
+
         Icon(
             imageVector = iconCheck,
             contentDescription = "Check icon",
@@ -479,13 +586,20 @@ fun SignupScreen(context: Context) {
         mutableStateOf("")
     }
     var avatar by remember {
-        mutableStateOf("light1 0,0,0")
+        mutableStateOf("profiledefault #FFFFFF")
+    }
+    var uploadAvatar by remember {
+        mutableStateOf(avatar)
     }
     var color by remember {
-        mutableStateOf("0,0,0")
+        mutableStateOf("#FFFFFF")
     }
     var done by remember {
         mutableStateOf(false)
+    }
+
+    if (firebaseAuth.currentUser != null) {
+        navigator.navigate("home")
     }
 
 
@@ -503,7 +617,7 @@ fun SignupScreen(context: Context) {
                             if (it.isSuccessful) {
                                 val addUserNameAndPhoto = userProfileChangeRequest {
                                     displayName = userName
-                                    photoUri = Uri.parse(avatar)
+                                    photoUri = Uri.parse(uploadAvatar)
                                 }
                                 firebaseAuth.currentUser!!.updateProfile(addUserNameAndPhoto)
 
@@ -533,10 +647,9 @@ fun SignupScreen(context: Context) {
         avatar = if (lightdark == 0) " dark" else "light"
         val imagenum = Random().nextInt(28)
         avatar += imagenum.toString()
-        val r = Random().nextInt(256)
-        val g = Random().nextInt(256)
-        val b = Random().nextInt(256)
-        avatar += " $r,$g,$b"
+        val randomColor = String.format("%06x", Random().nextInt(0x1000000))
+        avatar += " #$randomColor"
+        uploadAvatar = avatar
     }
 
     Column(
@@ -609,6 +722,8 @@ fun SignupScreen(context: Context) {
             visualTransformation = PasswordVisualTransformation(),
             singleLine = true
         )
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(text = "Tap image to generate icon")
         Spacer(modifier = Modifier.height(10.dp))
         IconButton(
             onClick = {
@@ -616,39 +731,45 @@ fun SignupScreen(context: Context) {
                 done = false
             },
             colors = IconButtonDefaults.iconButtonColors(
-//                containerColor = Color()
-            )
+                containerColor = Color(android.graphics.Color.parseColor(color))
+            ),
+            modifier = Modifier
+                .size(100.dp)
         ) {
             var id by remember {
                 mutableIntStateOf(R.drawable.dark0)
             }
             if (!done) {
                 try {
-//                    println("tests: $avatar")
-//                    if (avatar.substring(7,8) == " ") {
-//                        var name = avatar.substring(0, 6)
-//                        name = name.trim()
-//                        println("tests: $name")
-//
-//                        avatar = avatar.removeRange(0, 7)
-//                        color = avatar
-//                        println("tests: $color")
-//                    } else {
-//                        var name = avatar.substring(0, 7)
-//                        name = name.trim()
-//                        println("tests: $name")
-//
-//                        avatar = avatar.removeRange(0, 7)
-//                        color = avatar
-//                        println("tests: $color")
-//                    }
-                    var name = avatar.substring(0, 6)
-                    name = name.trim()
-                    println("tests: $name")
+                    var name = ""
+                    println("tests: $avatar")
+                    if (avatar.contains("profiledefault")) {
+                        name = avatar.substring(0, 14)
+                        name = name.trim()
+                        println("tests: $name")
 
-                    avatar = avatar.removeRange(0, 7)
-                    color = avatar
-                    println("tests: $color")
+                        avatar = avatar.removeRange(0, 15)
+                        color = avatar
+                        println("tests: $color")
+                    } else {
+                        if (avatar.substring(6, 7) == " ") {
+                            name = avatar.substring(0, 6)
+                            name = name.trim()
+                            println("tests: $name")
+
+                            avatar = avatar.removeRange(0, 7)
+                            color = avatar
+                            println("tests: $color")
+                        } else {
+                            name = avatar.substring(0, 7)
+                            name = name.trim()
+                            println("tests: $name")
+
+                            avatar = avatar.removeRange(0, 8)
+                            color = avatar
+                            println("tests: $color")
+                        }
+                    }
 
                     id = context.resources.getIdentifier(
                         name,
@@ -660,7 +781,12 @@ fun SignupScreen(context: Context) {
                 }
                 done = true
             }
-            Icon(painter = painterResource(id = id), contentDescription = "Icon")
+            Icon(
+                painter = painterResource(id = id),
+                contentDescription = "Icon",
+                modifier = Modifier
+                    .size(150.dp)
+            )
         }
         Spacer(modifier = Modifier.height(10.dp))
         Button(
@@ -678,42 +804,156 @@ fun SignupScreen(context: Context) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(context: Context) {
+    var message by remember {
+        mutableStateOf("")
+    }
+
+    val database = FirebaseDatabase.getInstance().reference
+
+    fun postMessage() {
+        try {
+            if (message.trim().isNotEmpty()) {
+                val messageHashMap = HashMap<String, String>()
+                messageHashMap["avatar"] = "${firebaseAuth.currentUser!!.photoUrl}"
+                messageHashMap["username"] = "${firebaseAuth.currentUser!!.displayName}"
+                messageHashMap["timestamp"] = "${Calendar.DATE} ${Calendar.getInstance().time}"
+                messageHashMap["message"] = message
+
+                database.child("Messages").push().setValue(messageHashMap)
+                message = ""
+            } else {
+                Toast.makeText(context, "Invalid Feedback", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Throwable) {
+            Toast.makeText(context, "Error: $e", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Please Log In")
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                var message by remember {
-                    mutableStateOf("")
+        if (firebaseAuth.currentUser == null) {
+            Text(text = "Please Log In")
+        } else {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                @Composable
+                fun message(
+                    avatar: String,
+                    name: String,
+                    timestamp: String,
+                    message: String
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.profiledefault),
+                            contentDescription = "logo",
+                            modifier = Modifier
+                                .size(60.dp)
+                                .padding(10.dp)
+                        )
+                        Column {
+                            Row(modifier = Modifier.padding(top = 10.dp)) {
+                                Text(text = name)
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Text(text = timestamp)
+                            }
+                            Text(text = message)
+                        }
+                    }
                 }
-                TextField(
-                    value = message,
-                    onValueChange = {
-                        message = it
-                    },
-                    label = {
-                        Text(text = "Message")
-                    },
-                    maxLines = 4,
-                    modifier = Modifier.fillMaxWidth(0.8f),
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = Color(0xFFD3E8FF)
+
+//                message(avatar = "", name = "Check", timestamp = "Test", message = "Test")
+
+                val avatarlist = mutableListOf<String>()
+                val namelist = mutableListOf<String>()
+                val timestamplist = mutableListOf<String>()
+                val messagelist = mutableListOf<String>()
+
+                val dataList = mutableListOf<Message?>()
+
+                FirebaseDatabase.getInstance().getReference("Messages")
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            for (DataSnap in snapshot.children) {
+//                                val avatarSnap = snapshot.child("-NcNvKzbdZA0kcVb7N_h/avatar").toString()
+//                                val nameSnap = snapshot.child("-NcNvKzbdZA0kcVb7N_h/name").toString()
+//                                val timestampSnap = snapshot.child("-NcNvKzbdZA0kcVb7N_h/timestamp").toString()
+//                                val messageSnap = snapshot.child("-NcNvKzbdZA0kcVb7N_h/message").toString()
+//
+//                                avatarlist.add(avatarSnap)
+//                                namelist.add(nameSnap)
+//                                timestamplist.add(timestampSnap)
+//                                messagelist.add(messageSnap)
+                                val messageSnap = snapshot.getValue(Message::class.java)
+                                dataList.add(messageSnap)
+                            }
+//                            println("tests: ${snapshot}, $avatarlist, $namelist, $timestamplist, $messagelist")
+                            println("tests: $dataList")
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            Toast.makeText(context, "$error", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                     )
-                )
-                IconButton(onClick = { }) {
-                    Icon(
-                        imageVector = Icons.Default.Send,
-                        contentDescription = "Send Message"
-                    )
+//                var num by remember {
+//                    mutableStateOf(0)
+//                }
+//
+//                for (item in dataList) {
+//                    message(
+//                        avatar = avatarlist[num],
+//                        name = namelist[num],
+//                        timestamp = timestamplist[num],
+//                        message = messagelist[num]
+//                    )
+//                    num++
+//                }
+                dataList.forEach {item ->
+                    if (item != null) {
+                        message(
+                            avatar = item.avatar,
+                            name = item.name,
+                            timestamp = item.time,
+                            message = item.message
+                        )
+                    } else {
+                        Toast.makeText(context, "Error Retrieving message", Toast.LENGTH_SHORT).show()
+                    }
                 }
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    TextField(
+                        value = message,
+                        onValueChange = {
+                            message = it
+                        },
+                        label = {
+                            Text(text = "Message")
+                        },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(0.8f),
+                        colors = TextFieldDefaults.textFieldColors(
+                            containerColor = Color(0xFFD3E8FF)
+                        )
+                    )
+                    IconButton(onClick = { postMessage() }) {
+                        Icon(
+                            imageVector = Icons.Default.Send,
+                            contentDescription = "Send Message",
+                            tint = Color(0xFF97b6db)
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(15.dp))
             }
-            Spacer(modifier = Modifier.height(15.dp))
         }
     }
 }
