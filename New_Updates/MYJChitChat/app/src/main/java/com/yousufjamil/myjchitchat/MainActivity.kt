@@ -4,6 +4,8 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -871,38 +873,10 @@ fun HomeScreen(context: Context) {
 
 //                message(avatar = "", name = "Check", timestamp = "Test", message = "Test")
 
-                val avatarlist = mutableListOf<String>()
-                val namelist = mutableListOf<String>()
-                val timestamplist = mutableListOf<String>()
-                val messagelist = mutableListOf<String>()
-
-                val dataList = mutableListOf<Message?>()
-
-                FirebaseDatabase.getInstance().getReference("Messages")
-                    .addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            for (DataSnap in snapshot.children) {
-//                                val avatarSnap = snapshot.child("-NcNvKzbdZA0kcVb7N_h/avatar").toString()
-//                                val nameSnap = snapshot.child("-NcNvKzbdZA0kcVb7N_h/name").toString()
-//                                val timestampSnap = snapshot.child("-NcNvKzbdZA0kcVb7N_h/timestamp").toString()
-//                                val messageSnap = snapshot.child("-NcNvKzbdZA0kcVb7N_h/message").toString()
-//
-//                                avatarlist.add(avatarSnap)
-//                                namelist.add(nameSnap)
-//                                timestamplist.add(timestampSnap)
-//                                messagelist.add(messageSnap)
-                                val messageSnap = snapshot.getValue(Message::class.java)
-                                dataList.add(messageSnap)
-                            }
-//                            println("tests: ${snapshot}, $avatarlist, $namelist, $timestamplist, $messagelist")
-                            println("tests: $dataList")
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            Toast.makeText(context, "$error", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                    )
+//                val avatarlist = mutableListOf<String>()
+//                val namelist = mutableListOf<String>()
+//                val timestamplist = mutableListOf<String>()
+//                val messagelist = mutableListOf<String>()
 //                var num by remember {
 //                    mutableStateOf(0)
 //                }
@@ -916,18 +890,77 @@ fun HomeScreen(context: Context) {
 //                    )
 //                    num++
 //                }
-                dataList.forEach {item ->
-                    if (item != null) {
-                        message(
-                            avatar = item.avatar,
-                            name = item.name,
-                            timestamp = item.time,
-                            message = item.message
-                        )
-                    } else {
-                        Toast.makeText(context, "Error Retrieving message", Toast.LENGTH_SHORT).show()
+
+                @Composable
+                fun messages() {
+                    @Composable
+                    fun showMessages(dataList: MutableList<Message?>) {
+                        dataList.forEach { item ->
+                            if (item != null) {
+                                message(
+                                    avatar = item.avatar,
+                                    name = item.username,
+                                    timestamp = item.timestamp,
+                                    message = item.message
+                                )
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Error Retrieving message",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
                     }
+
+                    val dataList = mutableListOf<Message?>()
+                    var loadingMsg by remember {
+                        mutableStateOf(true)
+                    }
+
+                    FirebaseDatabase.getInstance().getReference("Messages")
+                        .addListenerForSingleValueEvent(object : ValueEventListener {
+                            @Composable
+                            fun CheckLength() {
+                                if (dataList.isNotEmpty()) {
+                                    showMessages(dataList = dataList)
+                                }
+                            }
+
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                for (DataSnap in snapshot.children) {
+//                                val avatarSnap = snapshot.child("-NcNvKzbdZA0kcVb7N_h/avatar").toString()
+//                                val nameSnap = snapshot.child("-NcNvKzbdZA0kcVb7N_h/name").toString()
+//                                val timestampSnap = snapshot.child("-NcNvKzbdZA0kcVb7N_h/timestamp").toString()
+//                                val messageSnap = snapshot.child("-NcNvKzbdZA0kcVb7N_h/message").toString()
+//
+//                                avatarlist.add(avatarSnap)
+//                                namelist.add(nameSnap)
+//                                timestamplist.add(timestampSnap)
+//                                messagelist.add(messageSnap)
+                                    val messageSnap = DataSnap.getValue(Message::class.java)
+                                    dataList.add(messageSnap)
+                                }
+//                            println("tests: ${snapshot}, $avatarlist, $namelist, $timestamplist, $messagelist")
+                                println("tests: $dataList")
+                                loadingMsg = false
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                Toast.makeText(context, "$error", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        )
+
+                    @Composable
+                    fun checkLength() {
+                        if (dataList.isNotEmpty()) {
+                            showMessages(dataList = dataList)
+                        }
+                    }
+                    checkLength()
                 }
+                messages()
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     TextField(
