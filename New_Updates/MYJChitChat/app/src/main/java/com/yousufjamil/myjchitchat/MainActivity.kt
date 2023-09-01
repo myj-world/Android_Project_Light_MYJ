@@ -4,8 +4,6 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -64,15 +62,14 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.yousufjamil.myjchitchat.chatretrieve.DataState
 import com.yousufjamil.myjchitchat.chatretrieve.Message
 import com.yousufjamil.myjchitchat.chatretrieve.MessageViewModel
@@ -80,7 +77,6 @@ import com.yousufjamil.myjchitchat.navandtopbar.AppTopBar
 import com.yousufjamil.myjchitchat.navandtopbar.MenuItem
 import com.yousufjamil.myjchitchat.ui.theme.MYJChitChatTheme
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Random
 
@@ -89,6 +85,7 @@ lateinit var navigator: NavHostController
 
 class MainActivity : ComponentActivity() {
     private val viewModel: MessageViewModel by viewModels()
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -150,63 +147,53 @@ class MainActivity : ComponentActivity() {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Spacer(modifier = Modifier.height(65.dp))
-                            when (viewModel.response.value) {
-                                is DataState.Success -> {
-                                    println("tests: Testing")
-                                    SetData(viewModel)
-                                }
-                                is DataState.Empty -> {
-                                    println("tests: Waiting")
-                                }
-                                else -> {
-                                    Navigation(context = this@MainActivity, navController = navigator)
-                                }
-                            }
+                            Navigation(context = this@MainActivity, navController = navigator)
                         }
                     }
                 }
             }
+            SetData(this@MainActivity, viewModel)
         }
     }
+}
 
-    @Composable
-    fun SetData(viewModel: MessageViewModel) {
-        when (val result = viewModel.response.value) {
-            is DataState.Loading -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
+@Composable
+fun SetData(context: Context, viewModel: MessageViewModel) {
+    when (val result = viewModel.response.value) {
+        is DataState.Loading -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
             }
+        }
 
-            is DataState.Success -> {
-                HomeScreen(this, result.data)
+        is DataState.Success -> {
+            HomeScreen(context, result.data)
+        }
+
+        is DataState.Failure -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = result.message,
+                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                )
             }
+        }
 
-            is DataState.Failure -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = result.message,
-                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    )
-                }
-            }
-
-            else -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Error Fetching data",
-                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    )
-                }
+        else -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Error Fetching data",
+                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                )
             }
         }
     }
@@ -215,8 +202,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Navigation(context: Context, navController: NavHostController) {
     NavHost(navController = navController, startDestination = "home") {
-        composable("home") {
-            HomeScreen(context = context, mutableListOf())
+        composable("home/{messages}", arguments = listOf(navArgument("messages") { type = NavType.inferFromValueType(Message())})) {backStackEntry ->
+//            HomeScreen(context = context, backStackEntry.arguments!!.getParcelable("messeges", Message()))
+            HomeScreen(context =context)
         }
         composable("login") {
             LoginScreen(context = context)
@@ -863,7 +851,7 @@ fun SignupScreen(context: Context) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(context: Context, data: MutableList<Message?>) {
+fun HomeScreen(context: Context, data: MutableList<Message?>?= mutableListOf()) {
     var message by remember {
         mutableStateOf("")
     }
