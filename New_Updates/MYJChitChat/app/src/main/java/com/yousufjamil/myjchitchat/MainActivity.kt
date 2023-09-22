@@ -4,6 +4,7 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -61,6 +62,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.postDelayed
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -82,6 +84,7 @@ import java.util.Random
 
 lateinit var firebaseAuth: FirebaseAuth
 lateinit var navigator: NavHostController
+lateinit var retrievedresult: MutableList<Message?>
 
 class MainActivity : ComponentActivity() {
     private val viewModel: MessageViewModel by viewModels()
@@ -95,6 +98,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MYJChitChatTheme {
                 navigator = rememberNavController()
+                retrievedresult = mutableListOf(Message("light1", "Loading...", "", ""))
 
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
@@ -159,41 +163,30 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun SetData(context: Context, viewModel: MessageViewModel) {
-    when (val result = viewModel.response.value) {
-        is DataState.Loading -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
-        }
+    var recompose by remember {
+        mutableStateOf(0)
+    }
 
-        is DataState.Success -> {
-            HomeScreen(context, result.data)
-        }
-
-        is DataState.Failure -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = result.message,
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+    Box(modifier = Modifier.padding(recompose.dp - recompose.dp)) {
+        when (val result = viewModel.response.value) {
+            is DataState.Loading -> {
+                Handler().postDelayed(
+                    {
+                        if (recompose > 0) recompose-- else recompose++
+                    },3000
                 )
             }
-        }
 
-        else -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Error Fetching data",
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                )
+            is DataState.Success -> {
+                retrievedresult = result.data
+            }
+
+            is DataState.Failure -> {
+                retrievedresult = mutableListOf(Message("light1", "Error", "", "Failed to load messages"))
+            }
+
+            is DataState.Empty -> {
+                retrievedresult = mutableListOf(Message("light1", "Error", "", "No messages found"))
             }
         }
     }
@@ -202,9 +195,8 @@ fun SetData(context: Context, viewModel: MessageViewModel) {
 @Composable
 fun Navigation(context: Context, navController: NavHostController) {
     NavHost(navController = navController, startDestination = "home") {
-        composable("home/{messages}", arguments = listOf(navArgument("messages") { type = NavType.inferFromValueType(Message())})) {backStackEntry ->
-//            HomeScreen(context = context, backStackEntry.arguments!!.getParcelable("messeges", Message()))
-            HomeScreen(context =context)
+        composable("home") {
+            HomeScreen(context = context)
         }
         composable("login") {
             LoginScreen(context = context)
@@ -851,7 +843,7 @@ fun SignupScreen(context: Context) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(context: Context, data: MutableList<Message?>?= mutableListOf()) {
+fun HomeScreen(context: Context) {
     var message by remember {
         mutableStateOf("")
     }
@@ -884,10 +876,13 @@ fun HomeScreen(context: Context, data: MutableList<Message?>?= mutableListOf()) 
         if (firebaseAuth.currentUser == null) {
             Text(text = "Please Log In")
         } else {
+            var recompose by remember {
+                mutableStateOf(0)
+            }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Bottom,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize().padding(recompose.dp - recompose.dp)
             ) {
                 @Composable
                 fun message(
@@ -916,6 +911,18 @@ fun HomeScreen(context: Context, data: MutableList<Message?>?= mutableListOf()) 
                         }
                     }
                 }
+
+                retrievedresult.forEach { message->
+                    if (message != null) {
+                        message(avatar = message.avatar, name = message.username, timestamp = message.timestamp, message = message.message)
+                    }
+                }
+
+                Handler().postDelayed(
+                    {
+                        if (recompose > 0) recompose-- else recompose++
+                    }, 3000
+                )
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     TextField(

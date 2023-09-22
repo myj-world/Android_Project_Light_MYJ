@@ -13,12 +13,13 @@ import com.yousufjamil.myjchitchat.firebaseAuth
 
 class MessageViewModel: ViewModel() {
 
-    val response: MutableState<DataState> = mutableStateOf(DataState.Empty)
+    val response: MutableState<DataState> = mutableStateOf(DataState.Loading)
 
     init {
-        if (firebaseAuth.currentUser != null) {
-            getMessages()
-        }
+//        if (firebaseAuth.currentUser != null) {
+//            getMessages()
+//        }
+        getMessages()
     }
 
     private fun getMessages() {
@@ -33,6 +34,7 @@ class MessageViewModel: ViewModel() {
                         dataList.add(messageSnap)
                     }
                     println("tests: $dataList")
+                    response.value = DataState.Success(dataList)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -40,5 +42,6 @@ class MessageViewModel: ViewModel() {
                 }
             }
             )
+        println("tests: done loading")
     }
 }
