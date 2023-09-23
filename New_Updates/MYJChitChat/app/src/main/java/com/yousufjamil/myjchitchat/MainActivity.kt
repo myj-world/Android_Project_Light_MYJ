@@ -17,19 +17,21 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -64,11 +66,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.postDelayed
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.database.FirebaseDatabase
@@ -94,11 +94,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         firebaseAuth = FirebaseAuth.getInstance()
+        retrievedresult = mutableListOf(Message("", "Loading...", "", ""))
 
         setContent {
             MYJChitChatTheme {
                 navigator = rememberNavController()
-                retrievedresult = mutableListOf(Message("light1", "Loading...", "", ""))
 
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
@@ -120,11 +120,11 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier
                                         .padding(10.dp, 20.dp),
                                     onItemClick = { item ->
-                                        Toast.makeText(
-                                            this@MainActivity,
-                                            "Clicked ${item.title}",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+//                                        Toast.makeText(
+//                                            this@MainActivity,
+//                                            "Clicked ${item.title}",
+//                                            Toast.LENGTH_SHORT
+//                                        ).show()
                                         scope.launch { drawerState.close() }
                                     }
                                 )
@@ -132,7 +132,8 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                     drawerState = drawerState,
-                    gesturesEnabled = drawerState.isOpen
+//                    gesturesEnabled = drawerState.isOpen
+                    gesturesEnabled = true
                 ) {
                     Scaffold(
                         topBar = {
@@ -156,7 +157,19 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-            SetData(this@MainActivity, viewModel)
+            var recompose by remember {
+                mutableStateOf(0)
+            }
+
+            Box(modifier = Modifier.padding(recompose.dp - recompose.dp)) {
+                SetData(this@MainActivity, viewModel)
+                viewModel.getMessages()
+                Handler().postDelayed(
+                    {
+                        if (recompose > 0) recompose-- else recompose++
+                    }, 5000
+                )
+            }
         }
     }
 }
@@ -173,7 +186,7 @@ fun SetData(context: Context, viewModel: MessageViewModel) {
                 Handler().postDelayed(
                     {
                         if (recompose > 0) recompose-- else recompose++
-                    },3000
+                    }, 3000
                 )
             }
 
@@ -182,11 +195,11 @@ fun SetData(context: Context, viewModel: MessageViewModel) {
             }
 
             is DataState.Failure -> {
-                retrievedresult = mutableListOf(Message("light1", "Error", "", "Failed to load messages"))
+                retrievedresult = mutableListOf(Message("", "Error", "", "Failed to load messages"))
             }
 
             is DataState.Empty -> {
-                retrievedresult = mutableListOf(Message("light1", "Error", "", "No messages found"))
+                retrievedresult = mutableListOf(Message("", "Error", "", "No messages found"))
             }
         }
     }
@@ -304,6 +317,11 @@ fun DrawerHeader(context: Context, onItemClick: () -> Unit) {
                     modifier = Modifier.padding(horizontal = 22.dp)
                 )
             }
+
+            var recompose by remember {
+                mutableStateOf(0)
+            }
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -321,24 +339,27 @@ fun DrawerHeader(context: Context, onItemClick: () -> Unit) {
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
                     ),
-                    modifier = Modifier.padding(start = 5.dp)
+                    modifier = Modifier.padding(start = 5.dp + (recompose.dp - recompose.dp))
                 ) {
                     if (firebaseAuth.currentUser != null) {
                         Text(text = "Logout")
                     } else {
                         Text(text = "Login")
                     }
-                }
-                IconButton(onClick = {
-                    onItemClick()
-                }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.addchannelbutton),
-                        contentDescription = "Add channel",
-                        modifier = Modifier.size(20.dp),
-                        tint = Color(0xFFFFFFFF)
+                    Handler().postDelayed(
+                        { if (recompose > 0) recompose-- else recompose++ }, 3000
                     )
                 }
+//                IconButton(onClick = {
+//                    onItemClick()
+//                }) {
+//                    Icon(
+//                        painter = painterResource(id = R.drawable.addchannelbutton),
+//                        contentDescription = "Add channel",
+//                        modifier = Modifier.size(20.dp),
+//                        tint = Color(0xFFFFFFFF)
+//                    )
+//                }
             }
         }
     }
@@ -358,7 +379,7 @@ fun DrawerBody(
     }
 
     Column(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
@@ -853,6 +874,7 @@ fun HomeScreen(context: Context) {
     fun postMessage() {
         try {
             if (message.trim().isNotEmpty()) {
+                Toast.makeText(context, "Sending...", Toast.LENGTH_SHORT).show()
                 val messageHashMap = HashMap<String, String>()
                 messageHashMap["avatar"] = "${firebaseAuth.currentUser!!.photoUrl}"
                 messageHashMap["username"] = "${firebaseAuth.currentUser!!.displayName}"
@@ -862,7 +884,7 @@ fun HomeScreen(context: Context) {
                 database.child("Messages").push().setValue(messageHashMap)
                 message = ""
             } else {
-                Toast.makeText(context, "Invalid Feedback", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Invalid Message", Toast.LENGTH_SHORT).show()
             }
         } catch (e: Throwable) {
             Toast.makeText(context, "Error: $e", Toast.LENGTH_SHORT).show()
@@ -875,14 +897,18 @@ fun HomeScreen(context: Context) {
     ) {
         if (firebaseAuth.currentUser == null) {
             Text(text = "Please Log In")
+            navigator.navigate("login")
         } else {
             var recompose by remember {
                 mutableStateOf(0)
             }
+            val scrollState = rememberLazyListState()
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Bottom,
-                modifier = Modifier.fillMaxSize().padding(recompose.dp - recompose.dp)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(recompose.dp - recompose.dp)
             ) {
                 @Composable
                 fun message(
@@ -894,27 +920,109 @@ fun HomeScreen(context: Context) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.profiledefault),
-                            contentDescription = "logo",
-                            modifier = Modifier
-                                .size(60.dp)
-                                .padding(10.dp)
-                        )
-                        Column {
-                            Row(modifier = Modifier.padding(top = 10.dp)) {
-                                Text(text = name)
-                                Spacer(modifier = Modifier.width(10.dp))
-                                Text(text = timestamp)
+                        if (avatar != "") {
+                            var avatarname by remember {
+                                mutableStateOf("light0")
                             }
-                            Text(text = message)
+                            var color by remember {
+                                mutableStateOf("#ffffff")
+                            }
+                            var done by remember {
+                                mutableStateOf(false)
+                            }
+                            var photo by remember {
+                                mutableStateOf("")
+                            }
+
+                            if (!done) {
+                                photo = avatar
+                                try {
+                                    if (photo.contains("profiledefault")) {
+                                        avatarname = photo.substring(0, 14)
+                                        avatarname = avatarname.trim()
+                                        println("tests: $avatarname")
+
+                                        photo = photo.removeRange(0, 15)
+                                        color = photo
+                                        println("tests: $color")
+                                    } else if (photo.substring(6, 7) == " ") {
+                                        avatarname = photo.substring(0, 6)
+                                        avatarname = avatarname.trim()
+                                        println("tests: $avatarname")
+
+                                        photo = photo.removeRange(0, 7)
+                                        color = photo
+                                    } else {
+                                        avatarname = photo.substring(0, 7)
+                                        avatarname = avatarname.trim()
+                                        println("tests: $avatarname")
+
+                                        photo = photo.removeRange(0, 8)
+                                        color = photo
+                                    }
+                                } catch (e: Throwable) {
+                                    Toast.makeText(
+                                        context,
+                                        e.stackTraceToString(),
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                }
+                                done = true
+                            }
+
+                            Image(
+                                painter = painterResource(id = context.resources.getIdentifier(
+                                    avatarname,
+                                    "drawable",
+                                    context.packageName
+                                )),
+                                contentDescription = "logo",
+                                modifier = Modifier
+                                    .size(60.dp)
+                                    .padding(10.dp)
+                                    .background(Color(android.graphics.Color.parseColor(color)))
+                            )
+                            Column {
+                                Row(modifier = Modifier.padding(top = 10.dp)) {
+                                    Text(text = name)
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Text(text = timestamp, color = Color(30, 30, 30), fontSize = 12.sp)
+                                }
+                                Text(text = message)
+                            }
+                        } else {
+                            Text(text = name, modifier = Modifier
+                                .padding(bottom = 10.dp)
+                                .fillMaxWidth(), textAlign = TextAlign.Center)
                         }
                     }
                 }
 
-                retrievedresult.forEach { message->
-                    if (message != null) {
-                        message(avatar = message.avatar, name = message.username, timestamp = message.timestamp, message = message.message)
+                val scope = rememberCoroutineScope()
+                LazyColumn (
+                    state = scrollState,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Bottom,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.85f)
+                        .padding(recompose.dp - recompose.dp)
+                ) {
+                    retrievedresult.forEach { message ->
+                        if (message != null) {
+                            item {
+                                message(
+                                    avatar = message.avatar,
+                                    name = message.username,
+                                    timestamp = message.timestamp,
+                                    message = message.message
+                                )
+                            }
+                        }
+                        scope.launch {
+                            scrollState.scrollToItem(retrievedresult.lastIndex)
+                        }
                     }
                 }
 
@@ -924,7 +1032,7 @@ fun HomeScreen(context: Context) {
                     }, 3000
                 )
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 10.dp)) {
                     TextField(
                         value = message,
                         onValueChange = {

@@ -22,7 +22,7 @@ class MessageViewModel: ViewModel() {
         getMessages()
     }
 
-    private fun getMessages() {
+    fun getMessages() {
         FirebaseDatabase.getInstance().getReference("Messages")
             .addListenerForSingleValueEvent(object : ValueEventListener {
 
