@@ -7,18 +7,24 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.yousufjamil.myjweather.background.GetCurrentWeather
 import com.yousufjamil.myjweather.ui.theme.MYJWeatherTheme
@@ -65,11 +71,23 @@ class MainActivity : ComponentActivity() {
                             )
                             Spacer(modifier = Modifier.height(10.dp))
                             Button(onClick = { setLocation(locationInput) }) {
-                                Text(text = "Submit")
+                                Text(text = "Get Weather")
                             }
                         }
                     } else {
-                        Text(text = currentWeatherResult)
+                        Column {
+                            Button(onClick = { }) {
+                                Row {
+                                    Icon(
+                                        imageVector = Icons.Default.LocationOn,
+                                        contentDescription = "Change location",
+                                        tint = Color.White
+                                    )
+                                    Text(text = "Change Location")
+                                }
+                            }
+                            Text(text = currentWeatherResult)
+                        }
                     }
                     Handler().postDelayed({ if (recompose > 0) recompose-- else recompose++ }, 1000)
                 }
@@ -85,6 +103,7 @@ class MainActivity : ComponentActivity() {
     private fun setLocation(location: String) {
         getSharedPreferences("myj_weather_info", MODE_PRIVATE).edit()
             .putString("loc_info", location).apply()
+        getCurrentWeather(getLocation())
     }
 
     private fun getCurrentWeather(city: String) {
