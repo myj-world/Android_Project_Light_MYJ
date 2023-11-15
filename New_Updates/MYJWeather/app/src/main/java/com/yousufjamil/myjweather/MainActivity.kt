@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -32,7 +34,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.yousufjamil.myjweather.background.GetCurrentWeather
 import com.yousufjamil.myjweather.ui.theme.MYJWeatherTheme
@@ -78,6 +83,15 @@ class MainActivity : ComponentActivity() {
                     mutableStateOf(0)
                 }
 
+                var background by remember {
+                    mutableStateOf(Color(255,255,255))
+                }
+
+                var textColor by remember {
+                    mutableStateOf(Color(0,0,0))
+                }
+
+
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -90,8 +104,7 @@ class MainActivity : ComponentActivity() {
 
                         Column(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .background(Color(135, 206, 235)),
+                                .fillMaxSize(),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
@@ -113,74 +126,200 @@ class MainActivity : ComponentActivity() {
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .background(Color(135, 206, 235))
+                                .background(background)
+                                .padding(15.dp)
                         ) {
-                            Button(onClick = {
-                                Toast.makeText(
-                                    this@MainActivity,
-                                    "Just a moment...",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                getSharedPreferences("myj_weather_info", MODE_PRIVATE).edit()
-                                    .putString("loc_info", "").apply()
-                                currentWeatherResult = ""
-                                name = ""
-                                region = ""
-                                country = ""
-                                lat = ""
-                                lon = ""
-                                last_updated = ""
-                                temp_c = ""
-                                temp_f = ""
-                                isday = ""
-                                weathertext = ""
-                                wind_mph = ""
-                                wind_kph = ""
-                                wind_dir = ""
-                                rain_mm = ""
-                                rain_in = ""
-                                humidity = ""
-                                feelslike_c = ""
-                                feelslike_f = ""
-                                vis_km = ""
-                                vis_mi = ""
-                                uv = ""
-                                gust_mph = ""
-                                gust_kph = ""
-                                weather_icon = ""
-                            }) {
-                                Row {
-                                    Icon(
-                                        imageVector = Icons.Default.LocationOn,
-                                        contentDescription = "Change location",
-                                        tint = Color.White
-                                    )
-                                    Text(text = "Change Location")
+                            decodeData()
+
+                            Row (
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Column {
+                                    Text(text = "$name, $region, $country", color = textColor)
+                                    Text(text = "$lon, $lat", color = textColor)
+                                }
+                                Button(onClick = {
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        "Just a moment...",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    getSharedPreferences("myj_weather_info", MODE_PRIVATE).edit()
+                                        .putString("loc_info", "").apply()
+                                    currentWeatherResult = ""
+                                    name = ""
+                                    region = ""
+                                    country = ""
+                                    lat = ""
+                                    lon = ""
+                                    last_updated = ""
+                                    temp_c = ""
+                                    temp_f = ""
+                                    isday = ""
+                                    weathertext = ""
+                                    wind_mph = ""
+                                    wind_kph = ""
+                                    wind_dir = ""
+                                    rain_mm = ""
+                                    rain_in = ""
+                                    humidity = ""
+                                    feelslike_c = ""
+                                    feelslike_f = ""
+                                    vis_km = ""
+                                    vis_mi = ""
+                                    uv = ""
+                                    gust_mph = ""
+                                    gust_kph = ""
+                                    weather_icon = ""
+                                }) {
+                                    Row {
+                                        Icon(
+                                            imageVector = Icons.Default.LocationOn,
+                                            contentDescription = "Change location",
+                                            tint = Color.White
+                                        )
+                                        Text(text = "Change Location")
+                                    }
                                 }
                             }
-                            decodeData()
-//                            Text(text = currentWeatherResult)
-                            Image(
-                                painter = rememberAsyncImagePainter(model = weather_icon),
-                                contentDescription = "Weather Icon",
-                                modifier = Modifier
-                                    .size(100.dp)
-                            )
-                            println("img: $weather_icon")
-                            Text(text = "Location: $name, $region, $country")
-                            Text(text = "Map position: $lon, $lat")
-                            Text(text = "Last updated: $last_updated")
-                            Text(text = "Temperature: $temp_c °C ($temp_f °F)")
-                            Text(text = "Feels like: $temp_c °C ($temp_f °F)")
-                            Text(text = "Weather: $weathertext")
-                            Text(text = "Current: " + if (isday == "1") "Morning" else "Night")
-                            Text(text = "Wind speed: $wind_kph kph ($wind_mph mph)")
-                            Text(text = "Wind direction: $wind_dir °")
-                            Text(text = "Precipitation: $rain_mm mm ($rain_in in)")
-                            Text(text = "Humdity: $humidity %")
-                            Text(text = "Visibily: $vis_km km ($vis_mi miles)")
-                            Text(text = "UV: $uv")
-                            Text(text = "Gust: $gust_kph kph ($gust_mph mph)")
+
+                            Row {
+                                Image(
+                                    painter = rememberAsyncImagePainter(model = weather_icon),
+                                    contentDescription = "Weather Icon",
+                                    modifier = Modifier
+                                        .size(140.dp)
+                                )
+                                Column {
+                                    Spacer(modifier = Modifier.height(30.dp))
+                                    Row {
+                                        Text(text = "$temp_c °C", color = textColor, fontSize = 28.sp)
+                                        Spacer(modifier = Modifier.width(5.dp))
+                                        Column {
+                                            Spacer(modifier = Modifier.height(14.dp))
+                                            Text(text = "$temp_f °F", color = textColor)
+                                        }
+                                    }
+                                    Text(text = "Feels like: $temp_c °C ($temp_f °F)", color = textColor)
+                                    Text(text = "Refreshed: $last_updated", color = textColor)
+                                }
+                            }
+
+                            Text(text = weathertext, color = textColor, fontSize = 40.sp)
+
+                            @Composable
+                            fun VerticalDivider() {
+                                Spacer(modifier = Modifier
+                                    .background(textColor)
+                                    .width(1.dp)
+                                    .height(80.dp))
+                            }
+
+                            @Composable
+                            fun HorizontalDivider() {
+                                Spacer(modifier = Modifier
+                                    .background(textColor)
+                                    .fillMaxWidth()
+                                    .height(1.dp))
+                            }
+
+                            Row (
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Column (
+                                    modifier = Modifier.fillMaxWidth(0.3f),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Icon(painter = painterResource(id = R.drawable.baseline_speed_24), contentDescription = "Wind speed", tint = textColor, modifier = Modifier.size(40.dp))
+                                    Text(text = "Wind speed", color = textColor, textAlign = TextAlign.Center)
+                                    Text(text = "$wind_kph kph ($wind_mph mph)", color = textColor, textAlign = TextAlign.Center)
+                                }
+                                VerticalDivider()
+                                Column (
+                                    modifier = Modifier.fillMaxWidth(0.6f),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Icon(painter = painterResource(id = R.drawable.baseline_compass_calibration_24), contentDescription = "Wind speed", tint = textColor, modifier = Modifier.size(40.dp))
+                                    Text(text = "Wind direction", color = textColor, textAlign = TextAlign.Center)
+                                    Text(text = "$wind_dir °", color = textColor, textAlign = TextAlign.Center)
+                                }
+                                VerticalDivider()
+                                Column (
+                                    modifier = Modifier.fillMaxWidth(0.99f),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Icon(painter = painterResource(id = R.drawable.baseline_water_24), contentDescription = "Wind speed", tint = textColor, modifier = Modifier.size(40.dp))
+                                    Text(text = "Precipitation", color = textColor, textAlign = TextAlign.Center)
+                                    Text(text = "$rain_mm mm ($rain_in in)", color = textColor, textAlign = TextAlign.Center)
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(5.dp))
+                            HorizontalDivider()
+                            Spacer(modifier = Modifier.height(5.dp))
+
+                            Row (
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Column (
+                                    modifier = Modifier.fillMaxWidth(0.3f),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Icon(painter = painterResource(id = R.drawable.baseline_water_drop_24), contentDescription = "Wind speed", tint = textColor, modifier = Modifier.size(40.dp))
+                                    Text(text = "Humidity", color = textColor, textAlign = TextAlign.Center)
+                                    Text(text = "$humidity %", color = textColor, textAlign = TextAlign.Center)
+                                }
+                                VerticalDivider()
+                                Column (
+                                    modifier = Modifier.fillMaxWidth(0.6f),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Icon(painter = painterResource(id = R.drawable.baseline_visibility_24), contentDescription = "Wind speed", tint = textColor, modifier = Modifier.size(40.dp))
+                                    Text(text = "Visibility", color = textColor, textAlign = TextAlign.Center)
+                                    Text(text = "$vis_km km ($vis_mi miles)", color = textColor, textAlign = TextAlign.Center)
+                                }
+                                VerticalDivider()
+                                Column (
+                                    modifier = Modifier.fillMaxWidth(0.99f),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Icon(painter = painterResource(id = R.drawable.baseline_wb_sunny_24), contentDescription = "Wind speed", tint = textColor, modifier = Modifier.size(40.dp))
+                                    Text(text = "UV", color = textColor, textAlign = TextAlign.Center)
+                                    Text(text = uv, color = textColor, textAlign = TextAlign.Center)
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(5.dp))
+                            HorizontalDivider()
+                            Spacer(modifier = Modifier.height(5.dp))
+
+                            Row (
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Column (
+                                    modifier = Modifier.fillMaxWidth(0.33f),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Icon(painter = painterResource(id = R.drawable.baseline_wind_power_24), contentDescription = "Wind speed", tint = textColor, modifier = Modifier.size(40.dp))
+                                    Text(text = "Gust", color = textColor, textAlign = TextAlign.Center)
+                                    Text(text = "$gust_kph kph ($gust_mph mph)", color = textColor, textAlign = TextAlign.Center)
+                                }
+                            }
+
+                            when (isday) {
+                                "1" -> {
+                                    background = Color(135, 206, 235)
+                                    textColor = Color( 0, 0, 0)
+                                }
+                                "0" -> {
+                                    background = Color(43, 44, 90)
+                                    textColor = Color( 255, 255, 255)
+                                }
+                            }
                         }
                     }
                     Handler().postDelayed({ if (recompose > 0) recompose-- else recompose++ }, 1000)
