@@ -1,0 +1,17 @@
+com.yousufjamil.dinnerdecider to 3.0 - DONE
+com.yousufjamil.ginastic to 3.0 - DONE
+com.yousufjamil.inteclick to 2.0 - DONE
+com.yousufjamil.jumaasurahs to 3.0
+com.yousufjamil.coderswag to 2.0 - DONE
+com.yousufjamil.myjdemos to 2.0
+com.yousufjamil.myjassistant to 3.0
+com.yousufjamil.swoosh to 2.0
+com.yousufjamil.myjtallycounter to 2.0 - DONE
+com.yousufjamil.myjworld to 3.0 - DONE
+com.yousufjamil.regillustrationsproject to 4.0 - DONE
+com.yousufjamil.quranWithTranslation to 3.0
+
+Optional:
+com.yousufjamil.myjconnect_to_web to 4.0
+com.yousufjamil.sweetfeetzltd to 4.0
+com.yousufjamil.pisjes to 11.0
