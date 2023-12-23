@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    namespace = "com.yousufjamil.myjassistant"
+    namespace = "com.yousufjamil.myjpasswordgenerator"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.yousufjamil.myjassistant"
+        applicationId = "com.yousufjamil.myjpasswordgenerator"
         minSdk = 21
         targetSdk = 34
-        versionCode = 4
-        versionName = "4.0"
+        versionCode = 1
+        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -66,6 +66,4 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-
-    implementation("com.notkamui.libs:keval:0.9.0")
 }
