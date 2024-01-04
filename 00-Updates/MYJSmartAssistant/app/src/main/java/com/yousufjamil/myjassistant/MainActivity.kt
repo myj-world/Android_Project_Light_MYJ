@@ -52,7 +52,12 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.painterResource
+import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.GenerateContentResponse
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
@@ -62,6 +67,14 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val generativeModel = GenerativeModel(
+            modelName = "gemini-pro",
+            apiKey = BuildConfig.geminiApiKey
+        )
+
+        Toast.makeText(this, "Sending a message may take some time", Toast.LENGTH_SHORT).show()
+
         setContent {
             MYJSmartAssistantTheme {
                 var msgs = remember {
@@ -94,6 +107,7 @@ class MainActivity : ComponentActivity() {
                             messageLower.lowercase().contains("what") && messageLower.lowercase()
                                 .contains("do") -> {
                                 "I can do a lot of things: \n" +
+                                        "- Respond to your questions with AI \n" +
                                         "- Respond to 'hello' or 'Salam' greeting \n" +
                                         "- Respond to 'What's up' or 'how are you' \n" +
                                         "- Flip a coin \n" +
@@ -200,10 +214,23 @@ class MainActivity : ComponentActivity() {
 //                            "Adding..."
 //                        }
                             else -> {
-                                when (Random().nextInt(3)) {
-                                    0 -> "I'm sorry, but I can't help you with that."
-                                    1 -> "I don't know about it"
-                                    else -> "I'm sorry, I'm unsure of your request"
+                                try {
+                                    var response: GenerateContentResponse
+                                    runBlocking {
+                                        response = generativeModel.generateContent(messageLower)
+                                    }
+                                    if (response.text != null) {
+                                        println("Tests: ${response.text}")
+                                        response.text.toString()
+                                    } else {
+                                        throw Exception()
+                                    }
+                                } catch (e: Exception) {
+                                    when (Random().nextInt(3)) {
+                                        0 -> "I'm sorry, but I can't help you with that."
+                                        1 -> "I don't know about it"
+                                        else -> "I'm sorry, I'm unsure of your request"
+                                    }
                                 }
                             }
                         }
@@ -225,11 +252,14 @@ class MainActivity : ComponentActivity() {
                         {
                             if (padding <= 0) padding++ else padding--
                             if (!recording && talk != "") {
-                                msgs.add("u$talk")
-                                msgs.add("b${reply(talk)}")
+                                val tempMsg = talk
+//                                        userMsgs.add(typing)
+//                                        botMsgs.add(reply(typing))
                                 talk = ""
+                                msgs.add("u$tempMsg")
+                                msgs.add("b${reply(tempMsg)}")
                             }
-                        }, 5000
+                        }, if (recording || talk != "" ) 500 else 5000
                     )
                     LazyColumn(
                         state = rememberLazyListState(),
@@ -354,10 +384,11 @@ class MainActivity : ComponentActivity() {
                                 .clickable {
                                     if (typing != "") {
                                         msgs.add("u$typing")
-                                        msgs.add("b${reply(typing)}")
+                                        val tempMsg = typing
 //                                        userMsgs.add(typing)
 //                                        botMsgs.add(reply(typing))
                                         typing = ""
+                                        msgs.add("b${reply(tempMsg)}")
                                     } else {
                                         if (ContextCompat.checkSelfPermission(
                                                 this@MainActivity,
