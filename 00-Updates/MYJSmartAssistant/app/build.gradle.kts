@@ -72,4 +72,11 @@ dependencies {
     implementation("com.notkamui.libs:keval:0.9.0")
 
     implementation("com.google.ai.client.generativeai:generativeai:0.1.1")
+
+    implementation("com.github.jeziellago:compose-markdown:0.4.0")
+
+    implementation ("com.google.android.exoplayer:exoplayer:2.19.1")
+
+    implementation ("io.coil-kt:coil-compose:2.1.0")
+    implementation ("io.coil-kt:coil-gif:2.1.0")
 }
