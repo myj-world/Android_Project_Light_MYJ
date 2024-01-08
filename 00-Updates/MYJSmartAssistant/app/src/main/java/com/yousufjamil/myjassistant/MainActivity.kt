@@ -100,6 +100,8 @@ class MainActivity : ComponentActivity() {
                     mutableStateListOf<String>()
                 }
 
+                var lazyListState = rememberLazyListState()
+
                 val coroutineScope = rememberCoroutineScope()
 
                 suspend fun generateResponse(msg: String) {
@@ -135,8 +137,8 @@ class MainActivity : ComponentActivity() {
                                     }
 
                                     messageLower.lowercase()
-                                        .contains("hello") || messageLower.lowercase()
-                                        .contains("hi") -> {
+                                        .contains(" hello ") || messageLower.lowercase()
+                                        .contains(" hi ") -> {
                                         "Hi there!"
                                     }
 
@@ -183,7 +185,7 @@ class MainActivity : ComponentActivity() {
                                         }
                                     }
 
-                                    messageLower.lowercase().contains("time") -> {
+                                    messageLower.lowercase().contains("what") || messageLower.lowercase().contains("time") -> {
                                         val timeStamp = Timestamp(System.currentTimeMillis())
                                         val sdf = SimpleDateFormat("HH:mm")
                                         val time = sdf.format(Date(timeStamp.time))
@@ -294,11 +296,14 @@ class MainActivity : ComponentActivity() {
                                 talk = ""
                                 msgs.add("u$tempMsg")
                                 reply(tempMsg)
+                                coroutineScope.launch {
+                                    lazyListState.animateScrollToItem(msgs.count()-1)
+                                }
                             }
                         }, (if (recording || talk != "") 500 else 1000)
                     )
                     LazyColumn(
-                        state = rememberLazyListState(),
+                        state = lazyListState,
                         modifier = Modifier
                             .padding(10.dp)
                             .fillMaxWidth()
@@ -443,16 +448,20 @@ class MainActivity : ComponentActivity() {
                             },
                             modifier = Modifier
                                 .fillMaxWidth(0.8f)
+                                .height(120.dp)
                                 .clip(
                                     RoundedCornerShape(
+                                        25.dp,
+                                        0.dp,
+                                        0.dp,
                                         25.dp
                                     )
                                 ),
                             colors = TextFieldDefaults.colors(
                                 unfocusedContainerColor = Color(236,210,209),
                                 focusedContainerColor = Color(236,210,209),
-                                unfocusedTextColor = Color(244, 67, 54, 255),
-                                focusedTextColor = Color(244, 67, 54, 255),
+                                unfocusedTextColor = Color(170,87,96),
+                                focusedTextColor = Color(170,87,96),
                                 unfocusedLabelColor = Color(132,81,77),
                                 focusedLabelColor = Color(132,81,77)
                             )
@@ -460,21 +469,27 @@ class MainActivity : ComponentActivity() {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .height(120.dp)
                                 .clip(
+
                                     RoundedCornerShape(
-                                        25.dp
+                                        0.dp,
+                                        25.dp,
+                                        25.dp,
+                                        0.dp
                                     )
                                 )
-                                .background(Color(12, 59, 131))
+                                .background(Color(132, 81, 77))
                                 .padding(2.dp)
                                 .clickable {
                                     if (typing != "") {
                                         msgs.add("u$typing")
                                         val tempMsg = typing
-//                                        userMsgs.add(typing)
-//                                        botMsgs.add(reply(typing))
                                         typing = ""
                                         reply(tempMsg)
+                                        coroutineScope.launch {
+                                            lazyListState.animateScrollToItem(msgs.count()-1)
+                                        }
                                     } else {
                                         if (ContextCompat.checkSelfPermission(
                                                 this@MainActivity,
