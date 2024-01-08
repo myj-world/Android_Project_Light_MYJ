@@ -54,6 +54,7 @@ import android.speech.SpeechRecognizer
 import androidx.compose.foundation.Image
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.key
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
@@ -283,6 +284,7 @@ class MainActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.Bottom,
                     modifier = Modifier
                         .padding(padding.dp - padding.dp)
+                        .background(Color(40, 38, 57))
                 ) {
                     Handler().postDelayed(
                         {
@@ -313,7 +315,7 @@ class MainActivity : ComponentActivity() {
                                 Box(
                                     modifier = Modifier
                                         .clip(RoundedCornerShape(0.dp, 12.dp, 12.dp, 12.dp))
-                                        .background(Color(26, 26, 26))
+                                        .background(Color(58, 56, 76))
                                         .padding(20.dp)
                                 ) {
 //                                    Text(
@@ -367,7 +369,7 @@ class MainActivity : ComponentActivity() {
                                     Box(
                                         modifier = Modifier
                                             .clip(RoundedCornerShape(12.dp, 0.dp, 12.dp, 12.dp))
-                                            .background(Color(124, 148, 180))
+                                            .background(Color(255, 104, 104))
                                             .padding(20.dp)
                                     ) {
 //                                        Text(
@@ -445,7 +447,15 @@ class MainActivity : ComponentActivity() {
                                     RoundedCornerShape(
                                         25.dp
                                     )
-                                )
+                                ),
+                            colors = TextFieldDefaults.colors(
+                                unfocusedContainerColor = Color(236,210,209),
+                                focusedContainerColor = Color(236,210,209),
+                                unfocusedTextColor = Color(244, 67, 54, 255),
+                                focusedTextColor = Color(244, 67, 54, 255),
+                                unfocusedLabelColor = Color(132,81,77),
+                                focusedLabelColor = Color(132,81,77)
+                            )
                         )
                         Box(
                             modifier = Modifier
