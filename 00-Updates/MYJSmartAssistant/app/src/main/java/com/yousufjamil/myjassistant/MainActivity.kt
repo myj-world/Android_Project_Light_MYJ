@@ -141,6 +141,9 @@ class MainActivity : ComponentActivity() {
                                 "bUh-oh! It seems like you're not connected to the internet. Please check your connection and try again. Any inappropriate language may also have caused the error."
                         }
                     }
+                    coroutineScope.launch {
+                        lazyListState.animateScrollToItem(msgs.count() - 1)
+                    }
                 }
 
                 fun reply(msg: String) {
@@ -302,6 +305,9 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }"
                             )
+                            coroutineScope.launch {
+                                lazyListState.animateScrollToItem(msgs.count() - 1)
+                            }
                         }, 500
                     )
                 }
@@ -323,10 +329,10 @@ class MainActivity : ComponentActivity() {
                                 val tempMsg = talk
                                 talk = ""
                                 msgs.add("u$tempMsg")
-                                reply(tempMsg)
                                 coroutineScope.launch {
                                     lazyListState.animateScrollToItem(msgs.count() - 1)
                                 }
+                                reply(tempMsg)
                             }
                         }, (if (recording || talk != "") 500 else 1000)
                     )
@@ -561,7 +567,7 @@ class MainActivity : ComponentActivity() {
                                 Text(text = "Message")
                             },
                             modifier = Modifier
-                                .fillMaxWidth(0.8f)
+                                .fillMaxWidth(if (typing == "") 0.6f else 0.8f)
                                 .height(120.dp)
                                 .clip(
                                     RoundedCornerShape(
@@ -572,14 +578,69 @@ class MainActivity : ComponentActivity() {
                                     )
                                 ),
                             colors = TextFieldDefaults.colors(
-                                unfocusedContainerColor = Color(236, 210, 209),
-                                focusedContainerColor = Color(236, 210, 209),
-                                unfocusedTextColor = Color(170, 87, 96),
-                                focusedTextColor = Color(170, 87, 96),
-                                unfocusedLabelColor = Color(132, 81, 77),
-                                focusedLabelColor = Color(132, 81, 77)
+                                unfocusedContainerColor = Color(148,147,156),
+                                focusedContainerColor = Color(148,147,156),
+                                unfocusedTextColor = Color(83,81,97),
+                                focusedTextColor = Color(83,81,97),
+                                unfocusedLabelColor = Color(62,60,77),
+                                focusedLabelColor = Color(62,60,77)
                             )
                         )
+                        if (typing == "") {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth(0.5f)
+                                    .height(120.dp)
+                                    .clip(
+
+                                        RoundedCornerShape(
+                                            0.dp,
+                                            0.dp,
+                                            0.dp,
+                                            0.dp
+                                        )
+                                    )
+                                    .background(Color(126,125,136))
+                                    .padding(2.dp)
+                                    .clickable {
+                                        typing = when (Random().nextInt(22)) {
+                                            1 -> "What is the population of Pakistan?"
+                                            2 -> "What is the capital of Japan?"
+                                            3 -> "How do black holes work?"
+                                            4 -> "What are the different types of renewable energy?"
+                                            5 -> "What is the latest advancement in artificial intelligence?"
+                                            6 -> "How do I calculate the area of a circle?"
+                                            7 -> "What is the best way to remove a stain from a carpet?"
+                                            8 -> "How do I change a light bulb?"
+                                            9 -> "What is the recipe for chocolate chip cookies?"
+                                            10 -> "Write a short story about a time traveler who visits the past."
+                                            11 -> "Write a poem about the beauty of nature."
+                                            12 -> "Create a song about a journey of self-discovery."
+                                            13 -> "Write a script for a play about a group of friends who are trying to solve a mystery."
+                                            14 -> "How can I improve my time management skills?"
+                                            15 -> "What is the most efficient way to pack a suitcase for a long trip?"
+                                            16 -> "How can I overcome my fear of public speaking?"
+                                            17 -> "Who is the author of the Harry Potter series?"
+                                            18 -> "What is the most popular video game of all time?"
+                                            19 -> "What are the best ways to manage stress?"
+                                            20 -> "How can I develop a healthy lifestyle?"
+                                            else -> "How can I set and achieve my goals?"
+                                        }
+                                    }
+                                    .height(50.dp),
+                                contentAlignment = Alignment.Center
+
+                            ) {
+                                Icon(
+                                    painter = painterResource(
+                                        id = R.drawable.baseline_lightbulb_24
+                                    ),
+                                    contentDescription = "Suggest",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(30.dp)
+                                )
+                            }
+                        }
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -593,17 +654,17 @@ class MainActivity : ComponentActivity() {
                                         0.dp
                                     )
                                 )
-                                .background(Color(132, 81, 77))
+                                .background(Color(105,103,116))
                                 .padding(2.dp)
                                 .clickable {
                                     if (typing != "") {
                                         msgs.add("u$typing")
                                         val tempMsg = typing
                                         typing = ""
-                                        reply(tempMsg)
                                         coroutineScope.launch {
                                             lazyListState.animateScrollToItem(msgs.count() - 1)
                                         }
+                                        reply(tempMsg)
                                     } else {
                                         if (ContextCompat.checkSelfPermission(
                                                 this@MainActivity,
@@ -625,6 +686,9 @@ class MainActivity : ComponentActivity() {
                                             SpeechToText(this@MainActivity)
                                         } else {
                                             msgs.add("bPermission not granted, please grant through settings")
+                                            coroutineScope.launch {
+                                                lazyListState.animateScrollToItem(msgs.count() - 1)
+                                            }
                                         }
                                     }
                                 }
