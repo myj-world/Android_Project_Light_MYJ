@@ -1,6 +1,8 @@
 package com.yousufjamil.myjassistant
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -52,14 +54,18 @@ import java.util.Random
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.Divider
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.key
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
@@ -116,165 +122,187 @@ class MainActivity : ComponentActivity() {
                         }
                     } catch (e: Exception) {
                         when (Random().nextInt(6)) {
-                            0 -> msgs[pos] = "bI'm sorry, but I can't help you with that right now. Please check your network connection. Any inappropriate language may also have caused the error."
-                            1 -> msgs[pos] = "bI couldn't connect. Please check your network connection. Any inappropriate language may also have caused the error."
-                            2 -> msgs[pos] = "bSorry, we can't seem to connect to the internet right now. Please check your connection and try again. We're waiting here for you! Any inappropriate language may also have caused the error."
-                            3 -> msgs[pos] = "bHouston, we have a problem! It seems like you're not connected to the internet. Any inappropriate language may also have caused the error."
-                            4 -> msgs[pos] = "bOops! Looks like you've lost your internet connection. Please reconnect to continue. Any inappropriate language may also have caused the error."
-                            else -> msgs[pos] = "bUh-oh! It seems like you're not connected to the internet. Please check your connection and try again. Any inappropriate language may also have caused the error."
+                            0 -> msgs[pos] =
+                                "bI'm sorry, but I can't help you with that right now. Please check your network connection. Any inappropriate language may also have caused the error."
+
+                            1 -> msgs[pos] =
+                                "bI couldn't connect. Please check your network connection. Any inappropriate language may also have caused the error."
+
+                            2 -> msgs[pos] =
+                                "bSorry, we can't seem to connect to the internet right now. Please check your connection and try again. We're waiting here for you! Any inappropriate language may also have caused the error."
+
+                            3 -> msgs[pos] =
+                                "bHouston, we have a problem! It seems like you're not connected to the internet. Any inappropriate language may also have caused the error."
+
+                            4 -> msgs[pos] =
+                                "bOops! Looks like you've lost your internet connection. Please reconnect to continue. Any inappropriate language may also have caused the error."
+
+                            else -> msgs[pos] =
+                                "bUh-oh! It seems like you're not connected to the internet. Please check your connection and try again. Any inappropriate language may also have caused the error."
                         }
                     }
                 }
 
                 fun reply(msg: String) {
-                    msgs.add(
-                        "b${
-                            try {
-                                val messageLower = msg.lowercase()
-                                when {
-                                    messageLower.lowercase().contains("salam") -> {
-                                        "Walaikumassalam"
-                                    }
-
-                                    messageLower.lowercase()
-                                        .contains(" hello ") || messageLower.lowercase()
-                                        .contains(" hi ") -> {
-                                        "Hi there!"
-                                    }
-
-                                    messageLower.lowercase()
-                                        .contains("what") && messageLower.lowercase()
-                                        .contains("do") -> {
-                                        "I can do a lot of things: \n" +
-                                                "- Respond to your questions with AI \n" +
-                                                "- Respond to 'hello' or 'Salam' greeting \n" +
-                                                "- Respond to 'What's up' or 'how are you' \n" +
-                                                "- Flip a coin \n" +
-                                                "- Solve difficult maths sums for you \n" +
-                                                "- Tell you the time \n" +
-                                                "- Open google for you \n" +
-                                                "- Search google for you \n" +
-                                                "- Make a phone call \n" +
-                                                "- Make tea for you"
-                                    }
-
-                                    (messageLower.lowercase()
-                                        .contains("what") && messageLower.lowercase()
-                                        .contains("up")) || (messageLower.lowercase()
-                                        .contains("how") && messageLower.lowercase()
-                                        .contains("you")) -> {
-                                        "I'm doing great, thanks for asking!"
-                                    }
-
-                                    messageLower.lowercase()
-                                        .contains("flip") && messageLower.lowercase()
-                                        .contains("coin") -> {
-                                        when (Random().nextInt(2)) {
-                                            0 -> "Coin landed on: Head"
-                                            else -> "Coin landed on: Tail"
-                                        }
-                                    }
-
-                                    messageLower.lowercase().contains("solve") -> {
-                                        var equation = messageLower.substringAfter("solve")
-                                        equation = equation.trim()
-                                        try {
-                                            Keval.eval(equation).toString()
-                                        } catch (e: Exception) {
-                                            "Sorry, but I can't solve that!"
-                                        }
-                                    }
-
-                                    messageLower.lowercase().contains("what") || messageLower.lowercase().contains("time") -> {
-                                        val timeStamp = Timestamp(System.currentTimeMillis())
-                                        val sdf = SimpleDateFormat("HH:mm")
-                                        val time = sdf.format(Date(timeStamp.time))
-
-                                        time.toString()
-                                    }
-
-                                    messageLower.lowercase().contains("open google") -> {
-                                        val site = Intent(Intent.ACTION_VIEW)
-                                        site.data = Uri.parse("https://www.google.com")
-                                        startActivity(site)
-
-                                        "Opening Google..."
-                                    }
-
-                                    messageLower.lowercase().contains("search") -> {
-                                        val site = Intent(Intent.ACTION_VIEW)
-                                        var searchTerm: String =
-                                            messageLower.substringAfter("search")
-                                        searchTerm = searchTerm.trim()
-                                        site.data =
-                                            Uri.parse("https://www.google.com/search?&q=$searchTerm")
-                                        startActivity(site)
-
-                                        "Searching..."
-                                    }
-
-                                    messageLower.lowercase()
-                                        .contains("make") && messageLower.lowercase()
-                                        .contains("tea") -> {
-                                        "Here's your tea: ☕ \n" +
-                                                "Hope you enjoy it 😉"
-                                    }
-
-                                    messageLower.lowercase().contains("call") -> {
-                                        try {
-
-                                            if (ContextCompat.checkSelfPermission(
-                                                    this,
-                                                    android.Manifest.permission.CALL_PHONE
-                                                ) != PackageManager.PERMISSION_GRANTED
-                                            ) {
-                                                ActivityCompat.requestPermissions(
-                                                    this,
-                                                    arrayOf(android.Manifest.permission.CALL_PHONE),
-                                                    101
-                                                )
+                    Handler().postDelayed(
+                        {
+                            msgs.add(
+                                "b${
+                                    try {
+                                        val messageLower = msg.lowercase()
+                                        when {
+                                            messageLower.lowercase().contains("salam") -> {
+                                                "Walaikumassalam"
                                             }
 
-                                            if (ContextCompat.checkSelfPermission(
-                                                    this,
-                                                    android.Manifest.permission.CALL_PHONE
-                                                ) == PackageManager.PERMISSION_GRANTED
-                                            ) {
-                                                var number = messageLower.substringAfter("call")
-                                                number = number.trim()
-                                                val intent = Intent(Intent.ACTION_CALL);
-                                                intent.data = Uri.parse("tel:$number")
-                                                startActivity(intent)
-                                                "Calling..."
-                                            } else {
-                                                "Permission not granted, please grant through settings"
+                                            messageLower.lowercase()
+                                                .contains("hello") || messageLower.lowercase()
+                                                .contains(" hi ") -> {
+                                                "Hi there!"
                                             }
-                                        } catch (e: Exception) {
-                                            "Advice: Please enter a valid number" +
-                                                    "Error is: $e"
-                                        }
-                                    }
+
+                                            messageLower.lowercase()
+                                                .contains("what can you do") -> {
+                                                "I can do a lot of things: \n" +
+                                                        "- Respond to your questions with AI \n" +
+                                                        "- Respond to 'hello' or 'Salam' greeting \n" +
+                                                        "- Respond to 'What's up' or 'how are you' \n" +
+                                                        "- Flip a coin \n" +
+                                                        "- Solve difficult maths sums for you \n" +
+                                                        "- Tell you the time \n" +
+                                                        "- Open google for you \n" +
+                                                        "- Search google for you \n" +
+                                                        "- Make a phone call \n" +
+                                                        "- Make tea for you"
+                                            }
+
+                                            messageLower.lowercase()
+                                                .contains("what's up") || messageLower.lowercase()
+                                                .contains("whats up") || messageLower.lowercase()
+                                                .contains("how are you") -> {
+                                                "I'm doing great, thanks for asking!"
+                                            }
+
+                                            messageLower.lowercase()
+                                                .contains("flip") && messageLower.lowercase()
+                                                .contains("coin") -> {
+                                                when (Random().nextInt(2)) {
+                                                    0 -> "Coin landed on: Head"
+                                                    else -> "Coin landed on: Tail"
+                                                }
+                                            }
+
+                                            messageLower.lowercase()
+                                                .contains("solve") && !messageLower.lowercase()
+                                                .contains("step") -> {
+                                                var equation = messageLower.substringAfter("solve")
+                                                equation = equation.trim()
+                                                try {
+                                                    Keval.eval(equation).toString()
+                                                } catch (e: Exception) {
+                                                    coroutineScope.launch {
+                                                        generateResponse(msg)
+                                                    }
+                                                    "Loading..."
+                                                }
+                                            }
+
+                                            messageLower.lowercase()
+                                                .contains("what") && messageLower.lowercase()
+                                                .contains("time") -> {
+                                                val timeStamp =
+                                                    Timestamp(System.currentTimeMillis())
+                                                val sdf = SimpleDateFormat("HH:mm")
+                                                val time = sdf.format(Date(timeStamp.time))
+
+                                                time.toString()
+                                            }
+
+                                            messageLower.lowercase().contains("open google") -> {
+                                                val site = Intent(Intent.ACTION_VIEW)
+                                                site.data = Uri.parse("https://www.google.com")
+                                                startActivity(site)
+
+                                                "Opening Google..."
+                                            }
+
+                                            messageLower.lowercase().contains("search") -> {
+                                                val site = Intent(Intent.ACTION_VIEW)
+                                                var searchTerm: String =
+                                                    messageLower.substringAfter("search")
+                                                searchTerm = searchTerm.trim()
+                                                site.data =
+                                                    Uri.parse("https://www.google.com/search?&q=$searchTerm")
+                                                startActivity(site)
+
+                                                "Searching..."
+                                            }
+
+                                            messageLower.lowercase()
+                                                .contains("make") && messageLower.lowercase()
+                                                .contains("tea") -> {
+                                                "Here's your tea: ☕ \n" +
+                                                        "Hope you enjoy it 😉"
+                                            }
+
+                                            messageLower.lowercase().contains("call") -> {
+                                                try {
+
+                                                    if (ContextCompat.checkSelfPermission(
+                                                            this,
+                                                            android.Manifest.permission.CALL_PHONE
+                                                        ) != PackageManager.PERMISSION_GRANTED
+                                                    ) {
+                                                        ActivityCompat.requestPermissions(
+                                                            this,
+                                                            arrayOf(android.Manifest.permission.CALL_PHONE),
+                                                            101
+                                                        )
+                                                    }
+
+                                                    if (ContextCompat.checkSelfPermission(
+                                                            this,
+                                                            android.Manifest.permission.CALL_PHONE
+                                                        ) == PackageManager.PERMISSION_GRANTED
+                                                    ) {
+                                                        var number =
+                                                            messageLower.substringAfter("call")
+                                                        number = number.trim()
+                                                        val intent = Intent(Intent.ACTION_CALL);
+                                                        intent.data = Uri.parse("tel:$number")
+                                                        startActivity(intent)
+                                                        "Calling..."
+                                                    } else {
+                                                        "Permission not granted, please grant through settings"
+                                                    }
+                                                } catch (e: Exception) {
+                                                    "Advice: Please enter a valid number" +
+                                                            "Error is: $e"
+                                                }
+                                            }
 //                        messageLower.lowercase().contains("add") && messageLower.lowercase().contains("event") -> {
 //                            "Adding..."
 //                        }
-                                    else -> {
-                                        coroutineScope.launch {
-                                            generateResponse(msg)
+                                            else -> {
+                                                coroutineScope.launch {
+                                                    generateResponse(msg)
+                                                }
+                                                "Loading..."
+                                            }
                                         }
-                                        "Loading..."
+                                    } catch (e: Exception) {
+                                        when (Random().nextInt(6)) {
+                                            0 -> "I'm sorry, but I can't help you with that right now. Please check your network connection."
+                                            1 -> "I couldn't connect. Please check your network connection."
+                                            2 -> "Sorry, we can't seem to connect to the internet right now. Please check your connection and try again. We're waiting here for you!"
+                                            3 -> "Houston, we have a problem! It seems like you're not connected to the internet."
+                                            4 -> "Oops! Looks like you've lost your internet connection. Please reconnect to continue."
+                                            else -> "Uh-oh! It seems like you're not connected to the internet. Please check your connection and try again."
+                                        }
                                     }
-                                }
-                            } catch (e: Exception) {
-                                when (Random().nextInt(6)) {
-                                    0 -> "I'm sorry, but I can't help you with that right now. Please check your network connection."
-                                    1 -> "I couldn't connect. Please check your network connection."
-                                    2 -> "Sorry, we can't seem to connect to the internet right now. Please check your connection and try again. We're waiting here for you!"
-                                    3 -> "Houston, we have a problem! It seems like you're not connected to the internet."
-                                    4 -> "Oops! Looks like you've lost your internet connection. Please reconnect to continue."
-                                    else -> "Uh-oh! It seems like you're not connected to the internet. Please check your connection and try again."
-                                }
-                            }
-                        }"
+                                }"
+                            )
+                        }, 500
                     )
                 }
 
@@ -297,7 +325,7 @@ class MainActivity : ComponentActivity() {
                                 msgs.add("u$tempMsg")
                                 reply(tempMsg)
                                 coroutineScope.launch {
-                                    lazyListState.animateScrollToItem(msgs.count()-1)
+                                    lazyListState.animateScrollToItem(msgs.count() - 1)
                                 }
                             }
                         }, (if (recording || talk != "") 500 else 1000)
@@ -316,47 +344,91 @@ class MainActivity : ComponentActivity() {
                                         .fillMaxWidth()
                                         .padding(vertical = 5.dp),
                                     contentAlignment = Alignment.CenterStart
-                                ) {}
-                                Box(
-                                    modifier = Modifier
-                                        .clip(RoundedCornerShape(0.dp, 12.dp, 12.dp, 12.dp))
-                                        .background(Color(58, 56, 76))
-                                        .padding(20.dp)
                                 ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth(0.8f)
+                                            .clip(RoundedCornerShape(0.dp, 12.dp, 12.dp, 12.dp))
+                                            .background(Color(58, 56, 76))
+                                            .padding(15.dp)
+                                    ) {
+                                        Column {
 //                                    Text(
 //                                        text = msg,
 //                                        color = Color.White
 //                                    )
-                                    if (msg == "Loading...") {
-                                        val context = LocalContext.current
-                                        val imageLoader = ImageLoader.Builder(context)
-                                            .components {
-                                                if (SDK_INT >= 28) {
-                                                    add(ImageDecoderDecoder.Factory())
-                                                } else {
-                                                    add(GifDecoder.Factory())
+                                            if (msg == "Loading...") {
+                                                val context = LocalContext.current
+                                                val imageLoader = ImageLoader.Builder(context)
+                                                    .components {
+                                                        if (SDK_INT >= 28) {
+                                                            add(ImageDecoderDecoder.Factory())
+                                                        } else {
+                                                            add(GifDecoder.Factory())
+                                                        }
+                                                    }
+                                                    .build()
+                                                Image(
+                                                    painter = rememberAsyncImagePainter(
+                                                        ImageRequest.Builder(context)
+                                                            .data(data = R.drawable.load)
+                                                            .apply(block = {
+                                                                size(Size.ORIGINAL)
+                                                            }).build(), imageLoader = imageLoader
+                                                    ),
+                                                    contentDescription = "Loading...",
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                )
+                                            } else {
+                                                key(msg) {
+                                                    MarkdownText(
+                                                        markdown = msg,
+                                                        style = TextStyle(
+                                                            color = Color.White,
+                                                            fontSize = 16.sp
+                                                        ),
+                                                        fontResource = R.font.roboto
+                                                    )
+                                                }
+                                                Spacer(modifier = Modifier.height(10.dp))
+                                                Divider(modifier = Modifier.fillMaxWidth())
+                                                Spacer(modifier = Modifier.height(10.dp))
+                                                Row(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .clickable {
+                                                            val clipboard =
+                                                                getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                                            val clip =
+                                                                ClipData.newPlainText(
+                                                                    "Bot message",
+                                                                    msg
+                                                                )
+                                                            clipboard.setPrimaryClip(clip)
+                                                            Toast
+                                                                .makeText(
+                                                                    this@MainActivity,
+                                                                    "Copied to clipboard",
+                                                                    Toast.LENGTH_SHORT
+                                                                )
+                                                                .show()
+                                                        },
+                                                    horizontalArrangement = Arrangement.Start,
+                                                    verticalAlignment = Alignment.CenterVertically
+                                                ) {
+                                                    Icon(
+                                                        painter = painterResource(id = R.drawable.baseline_content_copy_24),
+                                                        contentDescription = "Copy to clipboard",
+                                                        tint = Color.White
+                                                    )
+                                                    Spacer(modifier = Modifier.width(10.dp))
+                                                    Text(
+                                                        text = "Copy to Clipboard",
+                                                        color = Color.White,
+                                                        fontSize = 16.sp
+                                                    )
                                                 }
                                             }
-                                            .build()
-                                        Image(
-                                            painter = rememberAsyncImagePainter(
-                                                ImageRequest.Builder(context)
-                                                    .data(data = R.drawable.load).apply(block = {
-                                                    size(Size.ORIGINAL)
-                                                }).build(), imageLoader = imageLoader
-                                            ),
-                                            contentDescription = "Loading...",
-                                            modifier = Modifier.fillMaxWidth(),
-                                        )
-                                    } else {
-                                        key(msg) {
-                                            MarkdownText(
-                                                markdown = msg,
-                                                style = TextStyle(
-                                                    color = Color.White
-                                                ),
-                                                fontResource = R.font.poppins
-                                            )
                                         }
                                     }
                                 }
@@ -373,23 +445,65 @@ class MainActivity : ComponentActivity() {
                                 ) {
                                     Box(
                                         modifier = Modifier
+                                            .fillMaxWidth(0.8f)
                                             .clip(RoundedCornerShape(12.dp, 0.dp, 12.dp, 12.dp))
                                             .background(Color(255, 104, 104))
-                                            .padding(20.dp)
+                                            .padding(15.dp)
                                     ) {
 //                                        Text(
 //                                            text = msg,
 //                                            color = Color.White
 //                                        )
 
-                                        key(msg) {
-                                            MarkdownText(
-                                                markdown = msg,
-                                                style = TextStyle(
-                                                    color = Color.White
-                                                ),
-                                                fontResource = R.font.poppins
-                                            )
+                                        Column {
+                                            key(msg) {
+                                                MarkdownText(
+                                                    markdown = msg,
+                                                    style = TextStyle(
+                                                        color = Color.White,
+                                                        fontSize = 16.sp
+                                                    ),
+                                                    fontResource = R.font.roboto
+                                                )
+                                            }
+                                            Spacer(modifier = Modifier.height(10.dp))
+                                            Divider(modifier = Modifier.fillMaxWidth())
+                                            Spacer(modifier = Modifier.height(10.dp))
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .clickable {
+                                                        val clipboard =
+                                                            getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                                        val clip =
+                                                            ClipData.newPlainText(
+                                                                "Your message",
+                                                                msg
+                                                            )
+                                                        clipboard.setPrimaryClip(clip)
+                                                        Toast
+                                                            .makeText(
+                                                                this@MainActivity,
+                                                                "Copied to clipboard",
+                                                                Toast.LENGTH_SHORT
+                                                            )
+                                                            .show()
+                                                    },
+                                                horizontalArrangement = Arrangement.Start,
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Icon(
+                                                    painter = painterResource(id = R.drawable.baseline_content_copy_24),
+                                                    contentDescription = "Copy to clipboard",
+                                                    tint = Color.White
+                                                )
+                                                Spacer(modifier = Modifier.width(10.dp))
+                                                Text(
+                                                    text = "Copy to Clipboard",
+                                                    color = Color.White,
+                                                    fontSize = 16.sp
+                                                )
+                                            }
                                         }
                                     }
                                 }
@@ -458,12 +572,12 @@ class MainActivity : ComponentActivity() {
                                     )
                                 ),
                             colors = TextFieldDefaults.colors(
-                                unfocusedContainerColor = Color(236,210,209),
-                                focusedContainerColor = Color(236,210,209),
-                                unfocusedTextColor = Color(170,87,96),
-                                focusedTextColor = Color(170,87,96),
-                                unfocusedLabelColor = Color(132,81,77),
-                                focusedLabelColor = Color(132,81,77)
+                                unfocusedContainerColor = Color(236, 210, 209),
+                                focusedContainerColor = Color(236, 210, 209),
+                                unfocusedTextColor = Color(170, 87, 96),
+                                focusedTextColor = Color(170, 87, 96),
+                                unfocusedLabelColor = Color(132, 81, 77),
+                                focusedLabelColor = Color(132, 81, 77)
                             )
                         )
                         Box(
@@ -488,7 +602,7 @@ class MainActivity : ComponentActivity() {
                                         typing = ""
                                         reply(tempMsg)
                                         coroutineScope.launch {
-                                            lazyListState.animateScrollToItem(msgs.count()-1)
+                                            lazyListState.animateScrollToItem(msgs.count() - 1)
                                         }
                                     } else {
                                         if (ContextCompat.checkSelfPermission(
