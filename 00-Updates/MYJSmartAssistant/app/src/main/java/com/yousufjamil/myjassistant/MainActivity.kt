@@ -10,63 +10,51 @@ import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Handler
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Send
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.notkamui.keval.Keval
-import com.yousufjamil.myjassistant.ui.theme.MYJSmartAssistantTheme
-import java.sql.Timestamp
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Random
-import android.speech.RecognizerIntent
-import android.speech.SpeechRecognizer
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.Divider
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.key
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.GifDecoder
@@ -74,16 +62,15 @@ import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import coil.size.Size
 import com.google.ai.client.generativeai.GenerativeModel
-import com.google.ai.client.generativeai.type.GenerateContentResponse
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player.REPEAT_MODE_ALL
-import com.google.android.exoplayer2.Player.REPEAT_MODE_OFF
-import com.google.android.exoplayer2.ui.StyledPlayerView
+import com.notkamui.keval.Keval
+import com.yousufjamil.myjassistant.ui.theme.MYJSmartAssistantTheme
 import dev.jeziellago.compose.markdowntext.MarkdownText
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
+import java.util.Random
 
 class MainActivity : ComponentActivity() {
 
@@ -97,8 +84,6 @@ class MainActivity : ComponentActivity() {
             modelName = "gemini-pro",
             apiKey = BuildConfig.geminiApiKey
         )
-
-//        Toast.makeText(this, "Sending a message may take some time", Toast.LENGTH_SHORT).show()
 
         setContent {
             MYJSmartAssistantTheme {
@@ -271,7 +256,7 @@ class MainActivity : ComponentActivity() {
                                                         var number =
                                                             messageLower.substringAfter("call")
                                                         number = number.trim()
-                                                        val intent = Intent(Intent.ACTION_CALL);
+                                                        val intent = Intent(Intent.ACTION_CALL)
                                                         intent.data = Uri.parse("tel:$number")
                                                         startActivity(intent)
                                                         "Calling..."
@@ -359,10 +344,6 @@ class MainActivity : ComponentActivity() {
                                             .padding(15.dp)
                                     ) {
                                         Column {
-//                                    Text(
-//                                        text = msg,
-//                                        color = Color.White
-//                                    )
                                             if (msg == "Loading...") {
                                                 val context = LocalContext.current
                                                 val imageLoader = ImageLoader.Builder(context)
@@ -456,10 +437,6 @@ class MainActivity : ComponentActivity() {
                                             .background(Color(255, 104, 104))
                                             .padding(15.dp)
                                     ) {
-//                                        Text(
-//                                            text = msg,
-//                                            color = Color.White
-//                                        )
 
                                         Column {
                                             key(msg) {
@@ -578,12 +555,12 @@ class MainActivity : ComponentActivity() {
                                     )
                                 ),
                             colors = TextFieldDefaults.colors(
-                                unfocusedContainerColor = Color(148,147,156),
-                                focusedContainerColor = Color(148,147,156),
-                                unfocusedTextColor = Color(83,81,97),
-                                focusedTextColor = Color(83,81,97),
-                                unfocusedLabelColor = Color(62,60,77),
-                                focusedLabelColor = Color(62,60,77)
+                                unfocusedContainerColor = Color(148, 147, 156),
+                                focusedContainerColor = Color(148, 147, 156),
+                                unfocusedTextColor = Color(83, 81, 97),
+                                focusedTextColor = Color(83, 81, 97),
+                                unfocusedLabelColor = Color(62, 60, 77),
+                                focusedLabelColor = Color(62, 60, 77)
                             )
                         )
                         if (typing == "") {
@@ -600,7 +577,7 @@ class MainActivity : ComponentActivity() {
                                             0.dp
                                         )
                                     )
-                                    .background(Color(126,125,136))
+                                    .background(Color(126, 125, 136))
                                     .padding(2.dp)
                                     .clickable {
                                         typing = when (Random().nextInt(22)) {
@@ -654,7 +631,7 @@ class MainActivity : ComponentActivity() {
                                         0.dp
                                     )
                                 )
-                                .background(Color(105,103,116))
+                                .background(Color(105, 103, 116))
                                 .padding(2.dp)
                                 .clickable {
                                     if (typing != "") {
