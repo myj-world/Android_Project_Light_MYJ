@@ -5,14 +5,14 @@ plugins {
 
 android {
     namespace = "com.yousufjamil.quranWithTranslation"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.yousufjamil.quranWithTranslation"
-        minSdk = 16
-        targetSdk = 34
-        versionCode = 4
-        versionName = "4.0"
+        minSdk = 21
+        targetSdk = 36
+        versionCode = 5
+        versionName = "4.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -8,7 +8,7 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.yousufjamil.quranWithTranslation" />
+                  <option name="appId" value="com.myjworld.thedrone" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

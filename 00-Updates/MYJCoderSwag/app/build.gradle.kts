@@ -5,14 +5,14 @@ plugins {
 
 android {
     namespace = "com.yousufjamil.myjcoderswag"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.yousufjamil.coderswag"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 2
-        versionName = "2.0"
+        targetSdk = 36
+        versionCode = 3
+        versionName = "2.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

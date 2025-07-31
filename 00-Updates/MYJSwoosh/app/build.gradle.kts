@@ -5,14 +5,14 @@ plugins {
 
 android {
     namespace = "com.yousufjamil.swoosh"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.yousufjamil.swoosh"
-        minSdk = 16
-        targetSdk = 34
-        versionCode = 3
-        versionName = "3.0"
+        minSdk = 21
+        targetSdk = 36
+        versionCode = 4
+        versionName = "3.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
